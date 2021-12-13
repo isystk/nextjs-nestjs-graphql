@@ -12,9 +12,12 @@ datasource db {
 
 
 // スキーマ
-model Post {
+model posts {
   id        Int     @default(autoincrement()) @id
-  title     String
-  content   String
-  published Boolean @default(false)
+  user_id           String
+  title             String
+  description       String
+  photo             String
+  regist_datetime   DateTime @default(now())
+  update_datetime   DateTime @updatedAt
 }

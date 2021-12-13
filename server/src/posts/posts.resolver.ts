@@ -1,21 +1,23 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PrismaService } from 'src/prisma.service';
-import { Post } from './models/post.model';
+import { Posts } from './models/posts.model';
 
-@Resolver(() => Post)
+@Resolver(() => Posts)
 export class PostsResolver {
   constructor(private prisma: PrismaService) {}
 
-  @Query(() => [Post])
+  @Query(() => [Posts])
   async posts() {
-    return this.prisma.post.findMany();
+    return this.prisma.posts.findMany();
   }
 
-  @Mutation(() => Post)
+  @Mutation(() => Posts)
   async createPost(
     @Args('title') title: string,
-    @Args('content') content: string,
+    @Args('description') description: string,
+    @Args('photo') photo: string,
+    @Args('user_id') user_id: string,
   ) {
-    return this.prisma.post.create({ data: { title, content } });
+    return this.prisma.posts.create({ data: { title, description, photo, user_id } });
   }
 }

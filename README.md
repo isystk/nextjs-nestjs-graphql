@@ -53,6 +53,54 @@ https://nextjs-nestjs-graphql.vercel.app/
 
 ## 💬 使い方
 
+サーバーサイド
+```
+# 下準備
+$ ./dc.sh init
+
+# Dockerを起動する
+$ ./dc.sh start
+
+# データベースとPHPが立ち上がるまで少し待ちます。(初回は5分程度)
+
+# MySQLにログインしてみる
+$ ./dc.sh mysql login
+
+cd ./server
+
+# 外部モジュールをインストール
+$ yarn
+
+# Prisma でテーブルを作成する
+$ npx prisma migrate dev --name posts
+
+# Prisma Studio を起動する
+$ npx prisma studio
+-----
+ブラウザが起動するのでテストデータを登録してください。
+-----
+
+# アプリを起動する
+$ yarn start
+
+# ブラウザでアクセス
+$ open http://localhost:3000/graphql
+
+# 以下のように必要なフィールドのみを指定してデータを取得できます。
+-----
+query {
+  posts {
+    id
+    title
+  }
+}
+-----
+
+# Dockerを停止する場合
+$ ./dc.sh stop
+```
+
+クライアントサイド
 ```
 yarn
 yarn dev

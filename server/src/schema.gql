@@ -2,17 +2,25 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Post {
+type Posts {
   id: ID!
+  user_id: String!
   title: String!
-  content: String!
-  published: Boolean!
+  description: String!
+  photo: String!
+  regist_datetime: DateTime!
+  update_datetime: DateTime!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Query {
-  posts: [Post!]!
+  posts: [Posts!]!
 }
 
 type Mutation {
-  createPost(content: String!, title: String!): Post!
+  createPost(user_id: String!, photo: String!, description: String!, title: String!): Posts!
 }
