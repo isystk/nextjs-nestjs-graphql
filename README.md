@@ -91,7 +91,20 @@ $ open http://localhost:3000/graphql
 query {
   posts {
     id
+    user_id
     title
+    description
+    photo
+    regist_datetime
+    update_datetime
+  }
+}
+-----
+# データを登録する場合はMutationを利用します。
+-----
+mutation {
+  createPost(user_id: "userA", title:"titleA", description:"textA", photo:"photo") {
+    id
   }
 }
 -----
