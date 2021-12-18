@@ -1,14 +1,26 @@
-import Env from '@/common/env/'
+import { gql } from '@apollo/client';
 
-/**
- * BFF（バックエンドフォーフロントエンド）用の URL を作成する
- */
-const getBffUrl = (path: string): string => {
-  return [Env.externalEndpointUrl, path].join('')
-}
+// 全件取得
+export const GET_POSTS = gql`
+  query {
+    posts {
+      id
+      user_id
+      title
+      description
+      photo
+      regist_datetime
+      update_datetime
+    }
+  }
+`;
 
-/** API のエンドポイント */
-export const API_ENDPOINT = {
-  /** 投稿 */
-  POSTS: getBffUrl('/posts'),
-}
+// 指定したIDのTODOを1件取得
+export const GET_TODO = gql`
+  query getTodo($id: String!) {
+    todo(id: $id) {
+      id
+      type
+    }
+  }
+`;

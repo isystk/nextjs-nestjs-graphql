@@ -2,7 +2,7 @@ const Env = {
   envName: 'local',
   internalEndpointUrl: 'http://localhost:3000',
   externalEndpointUrl:
-    'https://obew4p54y9.execute-api.ap-northeast-1.amazonaws.com/Prod',
+    'http://localhost:9000/graphql',
 }
 
 export default Env

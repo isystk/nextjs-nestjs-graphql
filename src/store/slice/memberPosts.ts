@@ -1,32 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { API_ENDPOINT } from '@/common/constants/api'
-import { API } from '@/utilities'
 import * as _ from 'lodash'
 import { Post } from '@/store/StoreTypes'
 
 const requestGetMemberPosts = async (userId: string) => {
-  const response = await API.get(`${API_ENDPOINT.POSTS}?userId=${userId}`)
-  return { response }
+  return {  }
 }
 
 const requestGetMemberPost = async (id: string) => {
-  const response = await API.get(`${API_ENDPOINT.POSTS}/${id}`)
-  return { response }
+  return {  }
 }
 
 const requestPostMemberPost = async (values: Post) => {
-  const response = await API.post(`${API_ENDPOINT.POSTS}`, values)
-  return { response }
+  return {  }
 }
 
 const requestPutMemberPost = async (id: string, values: Post) => {
-  const response = await API.put(`${API_ENDPOINT.POSTS}/${id}`, values)
-  return { response }
+  return {  }
 }
 
 const requestDeleteMemberPost = async (id: string) => {
-  await API.del(`${API_ENDPOINT.POSTS}/${id}`)
-  return { id }
+  return {  }
 }
 
 const memberPostsSlice = createSlice({

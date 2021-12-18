@@ -84,21 +84,27 @@ $ npx prisma studio
 $ yarn start
 
 # ブラウザでアクセス
-$ open http://localhost:3000/graphql
+$ open http://localhost:9000/graphql
 
 # 以下のように必要なフィールドのみを指定してデータを取得できます。
------
-query {
-  posts {
-    id
-    user_id
-    title
-    description
-    photo
-    regist_datetime
-    update_datetime
-  }
+
+$ QUERY=$(cat <<EOS
+{   "query": "{
+     posts {
+        id
+        user_id
+        title
+        description
+        photo
+        regist_datetime
+        update_datetime
+      }
+    }"
 }
+EOS
+) && QUERY=$(echo $QUERY | tr -d '\n')
+$ curl -X POST -d "${QUERY}" -H 'Content-Type: application/json' http://localhost:9000/graphql
+
 -----
 # データを登録する場合はMutationを利用します。
 -----
