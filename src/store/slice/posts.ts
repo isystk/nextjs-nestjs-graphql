@@ -10,10 +10,10 @@ const requestGetPosts = async () => {
   return { loading, error, data }
 }
 
-const requestGetPost = async (id: number) => {
+const requestGetPost = async (id: string) => {
   const { loading, error, data } = await client.query({
     query: FIND_POST,
-    variables: { id },
+    variables: { id: Number(id) },
   });
   return { loading, error, data }
 }

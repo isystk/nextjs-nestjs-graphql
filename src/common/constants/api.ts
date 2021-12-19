@@ -15,8 +15,8 @@ export const GET_POSTS = gql`
 
 // 指定したIDのPOSTを1件取得
 export const FIND_POST = gql`
-  query {
-    findPost(id: 1) {
+  query findPost($id: Float!) {
+    findPost(id: $id) {
       id
       title
       description
