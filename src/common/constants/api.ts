@@ -9,18 +9,21 @@ export const GET_POSTS = gql`
       description
       photo
       createdAt
-      updatedAt
-      authorId
     }
   }
 `;
 
-// 指定したIDのTODOを1件取得
-export const GET_TODO = gql`
-  query getTodo($id: String!) {
-    todo(id: $id) {
+// 指定したIDのPOSTを1件取得
+export const FIND_POST = gql`
+  query {
+    findPost(id: 1) {
       id
-      type
+      title
+      description
+      photo
+      createdAt
+      updatedAt
+      authorId
     }
   }
 `;

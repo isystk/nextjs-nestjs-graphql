@@ -11,6 +11,15 @@ export class PostResolver {
     return this.prisma.post.findMany();
   }
 
+  @Query(() => Post)
+  async findPost(@Args('id') id: number) {
+    return this.prisma.post.findUnique({
+      where: {
+        id: id
+      }
+    });
+  }
+
   @Mutation(() => Post)
   async createPost(
     @Args('title') title: string,

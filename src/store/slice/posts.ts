@@ -1,18 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { GET_POSTS }  from '@/common/constants/api'
+import { GET_POSTS, FIND_POST }  from '@/common/constants/api'
 import * as _ from 'lodash'
 import client from "@/utilities/api";
 
 const requestGetPosts = async () => {
-  // Queryを実行
   const { loading, error, data } = await client.query({
     query: GET_POSTS,
   });
   return { loading, error, data }
 }
 
-const requestGetPost = async (id: string) => {
-  return {  }
+const requestGetPost = async (id: number) => {
+  const { loading, error, data } = await client.query({
+    query: FIND_POST,
+    variables: { id },
+  });
+  return { loading, error, data }
 }
 
 const postsSlice = createSlice({
@@ -37,7 +40,7 @@ const postsSlice = createSlice({
     fetchPost(state?, action?) {
       state.loading = false
       state.error = null
-      const post = action.payload.data.posts
+      const post = action.payload.data.findPost
       state.items = { ...state.items, [post.id]: post }
     },
   },

@@ -16,7 +16,7 @@ type State = {
 }
 type PostDisplay = Post & {
   id: string
-  regist_data_yyyymmdd: string
+  createdAt_yyyymmdd: string
 }
 
 const PostsList: FC = () => {
@@ -33,7 +33,7 @@ const PostsList: FC = () => {
   const posts: PostDisplay[] = _.map(items, function (e: Data<Post>) {
     return {
       ...e,
-      regist_datetime_yyyymmdd: e.createdAt
+      createdAt_yyyymmdd: e.createdAt
         ? moment(e.createdAt).format('YYYY/MM/DD')
         : '',
     } as PostDisplay
@@ -48,7 +48,7 @@ const PostsList: FC = () => {
               <div className="category_link">{e.tagName}</div>
               <h2 className="entry-title">{e.title}</h2>
               <div className="entry-meta">
-                <span>{e.regist_datetime_yyyymmdd}</span>
+                <span>{e.createdAt_yyyymmdd}</span>
               </div>
             </div>
             <div className="entry-content">

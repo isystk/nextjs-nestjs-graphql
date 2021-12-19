@@ -35,12 +35,12 @@ const PostsDetail: FC = () => {
   if (loading) return <p>...loading</p>
   if (error) return <p>{error}</p>
 
-  const data = items[id]?.data || {}
+  const data = items[id] || {}
   const post = {
     ...data,
-    regist_data_yyyymmdd:
-      data.regist_datetime &&
-      moment(data.regist_datetime).format('YYYY/MM/DD HH:mm'),
+    createdAt_yyyymmdd:
+      data.createdAt &&
+      moment(data.createdAt).format('YYYY/MM/DD HH:mm'),
   }
 
   return (
@@ -85,7 +85,7 @@ const PostsDetail: FC = () => {
             icon="clock"
             style={{ width: 16, paddingRight: 10 }}
           />
-          {post && post.regist_data_yyyymmdd}
+          {post && post.createdAt_yyyymmdd}
         </div>
 
         <SnsShare title={post.title} url={`${URL.POSTS}/${id}`} />

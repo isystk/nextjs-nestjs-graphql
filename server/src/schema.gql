@@ -19,6 +19,7 @@ scalar DateTime
 
 type Query {
   posts: [Post!]!
+  findPost(id: Float!): Post!
 }
 
 type Mutation {
