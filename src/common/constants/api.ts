@@ -5,12 +5,12 @@ export const GET_POSTS = gql`
   query {
     posts {
       id
-      user_id
       title
       description
       photo
-      regist_datetime
-      update_datetime
+      createdAt
+      updatedAt
+      authorId
     }
   }
 `;

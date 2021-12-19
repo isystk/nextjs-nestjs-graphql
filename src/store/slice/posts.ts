@@ -32,12 +32,12 @@ const postsSlice = createSlice({
     fetchPosts(state?, action?) {
       state.loading = false
       state.error = null
-      state.items = _.mapKeys(action.payload.data, 'id')
+      state.items = _.mapKeys(action.payload.data.posts, 'id')
     },
     fetchPost(state?, action?) {
       state.loading = false
       state.error = null
-      const post = action.payload.data
+      const post = action.payload.data.posts
       state.items = { ...state.items, [post.id]: post }
     },
   },

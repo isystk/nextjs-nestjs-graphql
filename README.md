@@ -72,7 +72,7 @@ cd ./server
 $ yarn
 
 # Prisma でテーブルを作成する
-$ npx prisma migrate dev --name posts
+$ npx prisma migrate dev --name post
 
 # Prisma Studio を起動する
 $ npx prisma studio
@@ -85,31 +85,54 @@ $ yarn start
 
 # ブラウザでアクセス
 $ open http://localhost:9000/graphql
+```
 
+GraghQLの使い方
+```
 # 以下のように必要なフィールドのみを指定してデータを取得できます。
+-----
+query { 
+  posts {
+    id
+    title
+    description
+    photo
+    createdAt
+    updatedAt
+    authorId
+  }
+}
+-----
 
+# Curlで送信する場合は以下のようにJSONにして改行を削除する必要があります。
+-----
 $ QUERY=$(cat <<EOS
 {   "query": "{
      posts {
         id
-        user_id
         title
         description
         photo
-        regist_datetime
-        update_datetime
+        createdAt
+        updatedAt
+        authorId
       }
     }"
 }
 EOS
 ) && QUERY=$(echo $QUERY | tr -d '\n')
 $ curl -X POST -d "${QUERY}" -H 'Content-Type: application/json' http://localhost:9000/graphql
-
 -----
+
 # データを登録する場合はMutationを利用します。
 -----
 mutation {
-  createPost(user_id: "userA", title:"titleA", description:"textA", photo:"photo") {
+  createPost(
+    title:"titleA", 
+    description:"textA", 
+    photo:"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gIoSUNDX1BST0ZJTEUAAQEAAAIYAAAAAAIQAABtbnRyUkdCIFhZWiAAAAAAAAAAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAAHRyWFlaAAABZAAAABRnWFlaAAABeAAAABRiWFlaAAABjAAAABRyVFJDAAABoAAAAChnVFJDAAABoAAAAChiVFJDAAABoAAAACh3dHB0AAAByAAAABRjcHJ0AAAB3AAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAFgAAAAcAHMAUgBHAEIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFhZWiAAAAAAAABvogAAOPUAAAOQWFlaIAAAAAAAAGKZAAC3hQAAGNpYWVogAAAAAAAAJKAAAA+EAAC2z3BhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABYWVogAAAAAAAA9tYAAQAAAADTLW1sdWMAAAAAAAAAAQAAAAxlblVTAAAAIAAAABwARwBvAG8AZwBsAGUAIABJAG4AYwAuACAAMgAwADEANv/bAEMAAwICAgICAwICAgMDAwMEBgQEBAQECAYGBQYJCAoKCQgJCQoMDwwKCw4LCQkNEQ0ODxAQERAKDBITEhATDxAQEP/bAEMBAwMDBAMECAQECBALCQsQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEP/AABEIAGQAZAMBIgACEQEDEQH/xAAaAAEAAwEBAQAAAAAAAAAAAAAABAUGAwII/8QALBAAAgICAQMDAwIHAAAAAAAAAAECAwQRBRITIRQxQRUWUSJhBiMyM0Jxgf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwD7LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADnkXLHone67JqC301x6pP/S+QOgKbiuflyHHZ3I3Y0qI4ltsFCa1JRgk/1L4ZH4Plee5OdFt8uJ7M4KyyuqyTtgmtrx7J+wGhBnPuLkux9Z9Dj/Se70dXcfe6Ovp7mta1vzr30XuXl4+DjTy8qbhVWtzkouWl+dLyB2BHjyGHPLWFXcpXOpXdMU2uhvSe/Zb+PPkj83y30fAsy1iX5Eoxk1GqDkk0t7k/hfuBYApOQ5vKxuDw8+iuj1GY6IRVjarUp6b386S2eauY5LF43K5Pk3x99VUV2lhTlLrnvXS2/wAtpf8AQL0FPh8ny1XIU4HNYmNW8uE5Uzom5JSituEtr3097X4ZcAAAAAAGe4ui6PH83CzBlc7M3JcaZNw7sWl4T/D/ACQqacHKy+LXB8Ldg349ynfKWNKpV1KL6oSk0urfheNmuAGO/n/bv2l6HJ9Xv0u+zLt9vr/udeunXT5997NRyWRDFwbrp488hKDXajHqdjfhR1+5JAGb/hTCyuHuv43Ox33boxvhdFNx6dJdrqe/6PZefK8lvzUJ2cPnQri5SljWJJLbb6X4JoAz2TXTHgOLWfw086qqNLtrUW5Vahrq6P8ALT8NfuVt/Hyz3yORwfHWUYroqca5UulX312KacYtL4Wt6+TZgCgjlfWuZ467GxcmFWErbbZ3Uyr1KUOhQXUlt/qbevHgvwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//2Q=="
+    authorId: 1
+  ) {
     id
   }
 }

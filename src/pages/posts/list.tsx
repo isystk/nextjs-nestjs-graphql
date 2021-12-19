@@ -31,12 +31,10 @@ const PostsList: FC = () => {
   if (error) return <p>{error}</p>
 
   const posts: PostDisplay[] = _.map(items, function (e: Data<Post>) {
-    const data = e.data
     return {
-      id: e.id,
-      ...data,
-      regist_datetime_yyyymmdd: data.regist_datetime
-        ? moment(data.regist_datetime).format('YYYY/MM/DD')
+      ...e,
+      regist_datetime_yyyymmdd: e.createdAt
+        ? moment(e.createdAt).format('YYYY/MM/DD')
         : '',
     } as PostDisplay
   })

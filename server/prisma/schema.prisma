@@ -10,14 +10,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 // スキーマ
-model posts {
-  id        Int     @default(autoincrement()) @id
-  user_id           String
+model User {
+  id               Int      @id @default(autoincrement())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  email            String   @unique
+  name             String?
+  role             Role     @default(USER)
+  posts            Post[]
+}
+
+model Post {
+  id                Int      @default(autoincrement()) @id
   title             String
-  description       String
-  photo             String
-  regist_datetime   DateTime @default(now())
-  update_datetime   DateTime @updatedAt
+  description       String   @db.Text
+  photo             String   @db.Text
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  author            User?    @relation(fields: [authorId], references: [id])
+  authorId          Int?
+}
+
+enum Role {
+  USER
+  ADMIN
 }
