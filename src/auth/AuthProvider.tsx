@@ -13,13 +13,14 @@ type Props = {
 }
 
 const AuthProvider: FC = ({ children }: Props) => {
-  const currentUser = getUserPool().getCurrentUser()
-
-  return (
-    <AuthContext.Provider value={{ currentUser }}>
-      {children}
-    </AuthContext.Provider>
-  )
+  // const currentUser = getUserPool().getCurrentUser()
+  //
+  // return (
+  //   <AuthContext.Provider value={{ currentUser }}>
+  //     {children}
+  //   </AuthContext.Provider>
+  // )
+  return children
 }
 
 export { AuthContext, AuthProvider }

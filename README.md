@@ -68,6 +68,9 @@ $ ./dc.sh mysql login
 
 cd ./server
 
+# 環境ファイルを用意する
+$ cp .env.example .env
+
 # 外部モジュールをインストール
 $ yarn
 
@@ -77,7 +80,7 @@ $ npx prisma migrate dev --name post
 # Prisma Studio を起動する
 $ npx prisma studio
 -----
-ブラウザが起動するのでテストデータを登録してください。
+ブラウザが起動するのでUserテーブルにテスト用ユーザを追加してください。
 -----
 
 # アプリを起動する
@@ -152,8 +155,7 @@ yarn dev
 
 | プロジェクト| 概要|
 | :---------------------------------------| :-------------------------------|
-| [react-bootstrap](https://react-bootstrap.github.io/components/)| BootstrapのReact用コンポーネント |
-
+| [TypeScript + Prisma + NestJSでGraphQLサーバを作ってみる](https://zenn.dev/rince/articles/50a66241d04f0b)| TypeScript + Prisma + NestJSでGraphQLサーバを作ってみる |
 
 
 ## 🎫 Licence

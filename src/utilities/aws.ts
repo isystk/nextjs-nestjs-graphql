@@ -10,8 +10,9 @@ const config = {
 }
 
 export const getUserPool = () => {
-  return new CognitoUserPool({
-    UserPoolId: config.UserPoolId,
-    ClientId: config.ClientId,
-  })
+  // return new CognitoUserPool({
+  //   UserPoolId: config.UserPoolId,
+  //   ClientId: config.ClientId,
+  // })
+  return {}
 }
