@@ -3,11 +3,16 @@ import { PrismaService } from 'src/prisma.service';
 import { User, UserToken } from './models/user.model';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import { ApolloServer, UserInputError, AuthenticationError } from 'apollo-server-express';
 
 // パスワードをハッシュ化する
 const generatePasswordHash = async (password: string) => {
   const saltRounds = 10;
   return await bcrypt.hash(password, saltRounds);
+};
+// パスワードをチェックする
+const validatePassword = async (user:User, password: string) => {
+  return await bcrypt.compare(password, user.password);
 };
 
 // ユーザトークンを生成する
@@ -16,10 +21,12 @@ const createToken = async (user: User, secret: string, expiresIn: string) => {
   return await jwt.sign({ id, email }, secret, { expiresIn });
 };
 
+  
 @Resolver(() => User)
 export class UserResolver {
   constructor(private prisma: PrismaService) {}
 
+  // 会員登録
   @Mutation(() => UserToken)
   async signup(
     @Args('email') email: string,
@@ -30,6 +37,22 @@ export class UserResolver {
     password = await generatePasswordHash(password);
     
     const user = await this.prisma.user.create({ data: {email, password, name}});
+    return { token: createToken(user, 'my_secret',   '24h' ) };
+  }
+
+  // ログイン
+  @Mutation(() => UserToken)
+  async signin(
+      @Args('email') email: string,
+      @Args('password') password: string,
+  ) {
+
+    const user = await this.prisma.user.findUnique({ where: { email } });
+    if (!user) throw new UserInputError('No user found with this login credentials.');
+
+    const isValid = await validatePassword(user, password);
+    if (!isValid) throw new AuthenticationError('Invalid password.');
+
     return { token: createToken(user, 'my_secret',   '24h' ) };
   }
 }

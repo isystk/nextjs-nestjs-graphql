@@ -29,4 +29,5 @@ type Query {
 type Mutation {
   createPost(authorId: Float!, photo: String!, description: String!, title: String!): Post!
   signup(name: String!, password: String!, email: String!): UserToken!
+  signin(password: String!, email: String!): UserToken!
 }
