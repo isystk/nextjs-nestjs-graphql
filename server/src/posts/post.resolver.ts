@@ -1,4 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Post } from './models/post.model';
 
