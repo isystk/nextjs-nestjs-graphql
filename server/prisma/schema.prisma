@@ -16,6 +16,7 @@ model User {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   email            String   @unique
+  password         String
   name             String?
   role             Role     @default(USER)
   posts            Post[]
