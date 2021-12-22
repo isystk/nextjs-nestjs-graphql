@@ -14,12 +14,14 @@ Next.js（フロントエンド）・Nest.js（サーバーサイド）・GraghQ
 
 ### 利用している技術
 
-- Next.js 10 (React.js 16)
+- Next.js
 - typescript 4
 - material-ui
 - redux-toolkit
-- aws-cognito
-- aws-lambda
+- Apollo Client
+- Nest.js
+- Prisma
+- GraphQL
 
 
 ## 🌐 Demo
@@ -76,25 +78,26 @@ $ yarn
 # Prisma でテーブルを作成する
 $ npx prisma migrate dev --name post
 
-# Prisma Studio を起動する
-$ npx prisma studio
------
-ブラウザが起動するのでUserテーブルにテスト用ユーザを追加してください。
------
-
 # アプリを起動する
 $ yarn start
-
-# ブラウザでアクセス
-$ open http://localhost:9000/graphql
 ```
 
-GraghQLの使い方
+### Prisma Studio を起動する
+```
+cd server
+$ npx prisma studio
+```
+![prisma](./prisma.png "prisma")
+
+### GraghQLの使い方
+http://localhost:9000/graphql
+
+![graphql](./graphql.png "graphql")
 ```
 # 以下のように必要なフィールドのみを指定してデータを取得できます。
 -----
 query { 
-  posts {
+  getPosts {
     id
     title
     description
@@ -110,7 +113,7 @@ query {
 -----
 $ QUERY=$(cat <<EOS
 {   "query": "{
-     posts {
+     getPosts {
         id
         title
         description
