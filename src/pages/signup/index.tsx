@@ -42,17 +42,15 @@ const SignUp: FC = () => {
   })
   const onSubmit = async (values) => {
     const { email, password } = values
-    console.log(values)
     const { data } = await client.mutate({
       mutation: SIGN_UP,
       variables: {
         email,
         password,
-
+        name: email
       },
     });
-    console.log("login success!", data)
-    localStorage.setItem('authentication', data.token);
+    auth.login(data.signup.token)
     router.push(URL.MEMBER)
   }
 

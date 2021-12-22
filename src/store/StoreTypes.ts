@@ -23,6 +23,5 @@ export type Parts = {
 
 export type User = {
   id: number
-  email: string
-  token: string
+  name: string
 }

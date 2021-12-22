@@ -59,3 +59,17 @@ export const SIGN_IN = gql`
   }
 }
 `;
+
+// 認証済みチェック
+export const AUTH = gql`
+  mutation auth(
+      $token: String!
+    ) {
+    auth(
+      token: $token
+    ) {
+    id
+    name
+  }
+}
+`;

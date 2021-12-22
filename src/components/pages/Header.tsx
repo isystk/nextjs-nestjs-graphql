@@ -21,18 +21,9 @@ const Header: FC = () => {
       return (
         <a
           onClick={() => {
-            const token = localStorage.getItem('authentication');
-            if (token) {
-              // TODO
-              // user.signOut()
-              localStorage.clear()
-              console.log('signed out')
-              router.push(URL.LOGIN)
-              dispatch(closeMenu())
-            } else {
-              localStorage.clear()
-              console.log('no user signing in')
-            }
+            auth.logout()
+            router.push(URL.LOGIN)
+            dispatch(closeMenu())
           }}
         >
           ログアウト

@@ -26,7 +26,6 @@ const createToken = async (user: User, secret: string, expiresIn: string) => {
   return await jwt.sign({ id, email }, secret, { expiresIn });
 };
 
-  
 @Resolver(() => User)
 export class UserResolver {
   constructor(private prisma: PrismaService) {}
@@ -60,7 +59,7 @@ export class UserResolver {
 
     return { token: createToken(user, 'my_secret',   '24h' ) };
   }
-  
+
   // 認証
   @Mutation(() => User)
   async auth(

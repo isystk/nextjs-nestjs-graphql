@@ -37,6 +37,7 @@ const MemberPostsList: FC = () => {
   useEffect(() => {
     const user = auth.currentUser
     if (!user) {
+      console.log('Redirect Login')
       router.push(URL.LOGIN)
     } else {
       setNowLoading(false)

@@ -49,8 +49,7 @@ const Login: FC = () => {
         password
       },
     });
-    console.log("login success!", data)
-    localStorage.setItem('authentication', data.token);
+    auth.login(data.signin.token)
     router.push(URL.MEMBER)
   }
 
