@@ -57,7 +57,7 @@ const MemberPostsNew: FC = () => {
           <h1 className="entry-title">投稿登録</h1>
         </div>
         <div className="entry-content">
-          <MemberPostsForm userId={auth.currentUser.userDataKey} />
+          <MemberPostsForm user={auth.currentUser} />
         </div>
       </section>
     </Layout>

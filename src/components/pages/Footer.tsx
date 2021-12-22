@@ -7,7 +7,6 @@ import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 import { AuthContext } from '@/auth/AuthProvider'
 import { Parts } from '@/store/StoreTypes'
-import $ from 'jquery'
 type State = {
   parts: Parts
 }
@@ -17,17 +16,12 @@ const Footer: FC = () => {
   const auth = useContext(AuthContext)
   const { isSideMenuOpen } = useSelector((state: State) => state.parts)
   const [scrollTop, setScrollTop] = useState(0)
-  const handleScroll = (): void => {
-    setScrollTop($(window).scrollTop())
-  }
   const scrollToTop = (e): void => {
     e.preventDefault()
-    $('body,html').animate(
-      {
-        scrollTop: 0,
-      },
-      500
-    )
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
   }
 
   let scrollTopClass = 'link hide'

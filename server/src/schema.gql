@@ -29,12 +29,16 @@ type UserToken {
 }
 
 type Query {
-  posts: [Post!]!
+  getPosts: [Post!]!
   findPost(id: Float!): Post!
 }
 
 type Mutation {
+  getMyPosts(authorId: Float!): [Post!]!
+  getMyPost(id: Float!): Post!
   createPost(authorId: Float!, photo: String!, description: String!, title: String!): Post!
+  updatePost(authorId: Float!, photo: String!, description: String!, title: String!, id: Float!): Post!
+  deletePost(id: Float!): Post!
   signup(name: String!, password: String!, email: String!): UserToken!
   signin(password: String!, email: String!): UserToken!
   auth(token: String!): User!

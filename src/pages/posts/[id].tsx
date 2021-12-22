@@ -39,8 +39,7 @@ const PostsDetail: FC = () => {
   const post = {
     ...data,
     createdAt_yyyymmdd:
-      data.createdAt &&
-      moment(data.createdAt).format('YYYY/MM/DD HH:mm'),
+      data.createdAt && moment(data.createdAt).format('YYYY/MM/DD HH:mm'),
   }
 
   return (

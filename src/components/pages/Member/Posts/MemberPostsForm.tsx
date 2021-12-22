@@ -12,7 +12,7 @@ import {
 } from '@/store/slice/memberPosts'
 import { Input, Textarea } from '@/components/elements/Input'
 
-import { Data, Post } from '@/store/StoreTypes'
+import { Data, Post, User } from '@/store/StoreTypes'
 import {
   Grid,
   makeStyles,
@@ -33,14 +33,14 @@ type PostDisplay = Post & {
 }
 type Props = {
   postId?: string
-  userId: string
+  user: User
 }
 type State = {
   memberPosts: Data<Post>[]
 }
 
 const MemberPostsForm: FC<Props> = (props: Props) => {
-  const { postId, userId } = props
+  const { postId, user } = props
   const isEdit = !!postId
   const router = useRouter()
   const [nowLoading, setNowLoading] = useState<boolean>(true)
@@ -51,7 +51,7 @@ const MemberPostsForm: FC<Props> = (props: Props) => {
     // パスの投稿IDから投稿データを取得する
     ;(async () => {
       if (postId) {
-        await dispatch(getMemberPost(postId))
+        await dispatch(getMemberPost(user.token, Number(postId)))
         setNowLoading(false)
       } else {
         setNowLoading(false)
@@ -61,7 +61,7 @@ const MemberPostsForm: FC<Props> = (props: Props) => {
 
   const [post, setPost]: PostDisplay = useState({})
   useEffect(() => {
-    const data = items[postId]?.data || {
+    const data = items[postId] || {
       title: '',
       description: '',
       photo: '',
@@ -86,7 +86,8 @@ const MemberPostsForm: FC<Props> = (props: Props) => {
 
   if (loading || nowLoading) return <p>...loading</p>
   if (error) return <p>{error}</p>
-  if (postId && post && userId !== post.userId) return <p>Not Found</p>
+  if (postId && post && Number(user.id) !== Number(post.authorId))
+    return <p>Not Found</p>
 
   const initialValues = {
     ...post,
@@ -104,11 +105,11 @@ const MemberPostsForm: FC<Props> = (props: Props) => {
   const onSubmit = async (values) => {
     // ローディング表示
     dispatch(showLoading())
-    const data = { ...values, userId: userId }
+    const data = { ...values, authorId: Number(user.id) }
     if (isEdit) {
-      await dispatch(putMemberPost(postId, data))
+      await dispatch(putMemberPost(user.token, Number(postId), data))
     } else {
-      await dispatch(postMemberPost(data))
+      await dispatch(postMemberPost(user.token, data))
     }
     // マイページTOPに画面遷移する
     router.push(URL.MEMBER)
@@ -122,7 +123,7 @@ const MemberPostsForm: FC<Props> = (props: Props) => {
     }
     // ローディング表示
     dispatch(showLoading())
-    await dispatch(deleteMemberPost(postId))
+    await dispatch(deleteMemberPost(user.token, Number(postId)))
     // マイページTOPに画面遷移する
     router.push(URL.MEMBER)
     // ローディング非表示

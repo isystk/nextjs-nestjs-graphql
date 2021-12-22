@@ -66,12 +66,7 @@ const MemberPostsEdit: FC = () => {
           <h1 className="entry-title">投稿変更</h1>
         </div>
         <div className="entry-content">
-          {id && (
-            <MemberPostsForm
-              userId={auth.currentUser.userDataKey}
-              postId={id}
-            />
-          )}
+          {id && <MemberPostsForm user={auth.currentUser} postId={id} />}
         </div>
       </section>
     </Layout>

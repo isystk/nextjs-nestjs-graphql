@@ -1,6 +1,7 @@
 🌙 nextjs-nestjs-graphql
 ====
 
+[![isystk](https://circleci.com/gh/isystk/nextjs-nestjs-graphql.svg?style=svg)](https://circleci.com/gh/circleci/circleci-docs)
 ![GitHub issues](https://img.shields.io/github/issues/isystk/nextjs-nestjs-graphql)
 ![GitHub forks](https://img.shields.io/github/forks/isystk/nextjs-nestjs-graphql)
 ![GitHub stars](https://img.shields.io/github/stars/isystk/nextjs-nestjs-graphql)
@@ -22,8 +23,6 @@ Next.js（フロントエンド）・Nest.js（サーバーサイド）・GraghQ
 
 
 ## 🌐 Demo
-
-https://nextjs-nestjs-graphql.vercel.app/
 
 ![投稿一覧画面](./app1.png "投稿一覧画面")
 ![投稿画面](./app2.png "投稿画面")

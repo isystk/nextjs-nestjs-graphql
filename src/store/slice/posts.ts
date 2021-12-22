@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { GET_POSTS, FIND_POST }  from '@/common/constants/api'
+import { GET_POSTS, FIND_POST } from '@/common/constants/api'
 import * as _ from 'lodash'
-import client from "@/utilities/api";
+import client from '@/utilities/api'
 
 const requestGetPosts = async () => {
   const { loading, error, data } = await client.query({
     query: GET_POSTS,
-  });
+  })
   return { loading, error, data }
 }
 
@@ -14,7 +14,7 @@ const requestGetPost = async (id: string) => {
   const { loading, error, data } = await client.query({
     query: FIND_POST,
     variables: { id: Number(id) },
-  });
+  })
   return { loading, error, data }
 }
 
@@ -35,7 +35,7 @@ const postsSlice = createSlice({
     fetchPosts(state?, action?) {
       state.loading = false
       state.error = null
-      state.items = _.mapKeys(action.payload.data.posts, 'id')
+      state.items = _.mapKeys(action.payload.data.getPosts, 'id')
     },
     fetchPost(state?, action?) {
       state.loading = false

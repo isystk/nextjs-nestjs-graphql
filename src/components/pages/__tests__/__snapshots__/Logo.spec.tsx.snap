@@ -7,9 +7,14 @@ exports[`Logo 1`] = `
   <Link
     href="http://localhost:3000/"
   >
-    <a>
-      <styled.h1 />
-    </a>
+    <a
+      style={
+        Object {
+          "color": "#fff",
+          "fontSize": "25px",
+        }
+      }
+    />
   </Link>
 </div>
 `;

@@ -14,8 +14,8 @@ import {
   CardHeader,
 } from '@material-ui/core'
 import { Input, Textarea } from '@/components/elements/Input'
-import client from "@/utilities/api";
-import { SIGN_IN }  from '@/common/constants/api'
+import client from '@/utilities/api'
+import { SIGN_IN } from '@/common/constants/api'
 
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
@@ -46,9 +46,9 @@ const Login: FC = () => {
       mutation: SIGN_IN,
       variables: {
         email,
-        password
+        password,
       },
-    });
+    })
     auth.login(data.signin.token)
     router.push(URL.MEMBER)
   }

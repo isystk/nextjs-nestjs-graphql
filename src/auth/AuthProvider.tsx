@@ -1,11 +1,18 @@
-import React, { FC, createContext, Dispatch, SetStateAction, useEffect, useState, ReactNode } from 'react'
+import React, {
+  FC,
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react'
 import { User } from '@/store/StoreTypes'
-import client from "@/utilities/api";
-import { AUTH }  from '@/common/constants/api'
+import client from '@/utilities/api'
+import { AUTH } from '@/common/constants/api'
 
 type AuthContextProps = {
   currentUser: User | null | undefined
-  setCurrentUset: Dispatch<SetStateAction<User | null | undefined>>;
 }
 
 const AuthContext = createContext<AuthContextProps>({
@@ -19,9 +26,9 @@ type Props = {
 }
 
 const AuthProvider: VFC = ({ children }: Props) => {
-  const [currentUser, setCurrentUser] = useState<AuthContextProps>();
-  const [token, setToken] = useState<AuthContextProps>();
-  const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<AuthContextProps>()
+  const [token, setToken] = useState<AuthContextProps>()
+  const [loading, setLoading] = useState(true)
   const fetchCurrentUser = async () => {
     try {
       const { data = {} } = await client.mutate({
@@ -29,14 +36,15 @@ const AuthProvider: VFC = ({ children }: Props) => {
         variables: {
           token,
         },
-      });
-      setCurrentUser(data.auth);
-      setLoading(false);
-    } catch(errors) {
+      })
+      setCurrentUser({ ...data.auth, token })
+      setLoading(false)
+    } catch (errors) {
       // console.log(errors)
+      setLoading(false)
     }
   }
-  
+
   useEffect(() => {
     const token = localStorage.getItem('authorization')
     setToken(token)
@@ -46,11 +54,11 @@ const AuthProvider: VFC = ({ children }: Props) => {
     if (!token) {
       setCurrentUser(null)
     }
-    (async () => {
+    ;(async () => {
       await fetchCurrentUser()
     })()
- }, [token]);
-  
+  }, [token])
+
   if (loading) {
     return <>Loading...</>
   }
@@ -58,16 +66,16 @@ const AuthProvider: VFC = ({ children }: Props) => {
   console.log(currentUser)
 
   const login = (token) => {
-    setLoading(true);
-    setToken(token);
-    localStorage.setItem('authorization', token);
+    setLoading(true)
+    setToken(token)
+    localStorage.setItem('authorization', token)
   }
 
   const logout = () => {
-    setToken(null);
-    localStorage.clear();
+    setToken(null)
+    localStorage.clear()
   }
-  
+
   return (
     <AuthContext.Provider value={{ currentUser, login, logout }}>
       {children}

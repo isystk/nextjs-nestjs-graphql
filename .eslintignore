@@ -25,3 +25,5 @@ next.config.js
 # docker
 docker/**
 
+# server
+server/**

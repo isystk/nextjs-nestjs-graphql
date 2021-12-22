@@ -37,7 +37,6 @@ const MemberPostsList: FC = () => {
   useEffect(() => {
     const user = auth.currentUser
     if (!user) {
-      console.log('Redirect Login')
       router.push(URL.LOGIN)
     } else {
       setNowLoading(false)
@@ -47,7 +46,7 @@ const MemberPostsList: FC = () => {
   useEffect(() => {
     ;(async () => {
       const user = auth.currentUser
-      user && (await dispatch(getMemberPosts(user.userDataKey)))
+      user && (await dispatch(getMemberPosts(user.token, Number(user.id))))
     })()
   }, [dispatch])
 
@@ -55,13 +54,11 @@ const MemberPostsList: FC = () => {
     return _.map(
       items,
       (post, i): PostDisplay => {
-        const data: Post = post.data
         return {
-          id: post.id,
-          ...data,
-          regist_data_yyyymmdd: moment(data.regist_datetime).format(
-            'YYYY/MM/DD HH:mm'
-          ),
+          ...post,
+          createdAt_yyyymmdd: post.createdAt
+            ? moment(post.createdAt).format('YYYY/MM/DD')
+            : '',
         }
       }
     )
@@ -92,7 +89,7 @@ const MemberPostsList: FC = () => {
                 </div>
               </TableRowColumn>
               <TableRowColumn width="100px">
-                {post.regist_data_yyyymmdd}
+                {post.createdAt_yyyymmdd}
               </TableRowColumn>
               <TableRowColumn width="100px">
                 <input
