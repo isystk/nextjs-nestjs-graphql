@@ -87,12 +87,12 @@ $ yarn start
 cd server
 $ npx prisma studio
 ```
-![prisma](./prisma.png "prisma")
+![prisma](./server/prisma.png "prisma")
 
 ### GraghQLの使い方
 http://localhost:9000/graphql
 
-![graphql](./graphql.png "graphql")
+![graphql](./server/graphql.png "graphql")
 ```
 # 以下のように必要なフィールドのみを指定してデータを取得できます。
 -----
