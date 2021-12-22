@@ -1,6 +1,5 @@
 import React, { useContext, FC } from 'react'
 import Link from 'next/link'
-import { getUserPool } from '@/utilities/aws'
 import { URL } from '@/common/constants/url'
 import Logo from '@/components/pages/Logo'
 import { toggleMenu, closeMenu } from '@/store/slice/parts'
@@ -22,9 +21,10 @@ const Header: FC = () => {
       return (
         <a
           onClick={() => {
-            const user = getUserPool().getCurrentUser()
-            if (user) {
-              user.signOut()
+            const token = localStorage.getItem('authentication');
+            if (token) {
+              // TODO
+              // user.signOut()
               localStorage.clear()
               console.log('signed out')
               router.push(URL.LOGIN)

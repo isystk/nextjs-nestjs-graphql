@@ -27,3 +27,35 @@ export const FIND_POST = gql`
     }
   }
 `;
+
+// 会員登録
+export const SIGN_UP = gql`
+  mutation signup(
+      $email: String!
+      $password: String!
+      $name: String!
+    ) {
+    signup(
+      email: $email
+      password: $password
+      name: $name
+    ) {
+    token
+  }
+}
+`;
+
+// ログイン
+export const SIGN_IN = gql`
+  mutation signin(
+      $email: String!
+      $password: String!
+    ) {
+    signin(
+      email: $email
+      password: $password
+    ) {
+    token
+  }
+}
+`;

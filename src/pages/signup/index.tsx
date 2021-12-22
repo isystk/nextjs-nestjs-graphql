@@ -1,8 +1,6 @@
 import React, { useEffect, useState, FC, useContext } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { CognitoUserAttribute } from 'amazon-cognito-identity-js'
-import { getUserPool } from '@/utilities/aws'
 import { URL } from '@/common/constants/url'
 import Layout from '@/components/Layout'
 import Head from '@/components/pages/Head'
@@ -16,6 +14,8 @@ import {
   CardHeader,
 } from '@material-ui/core'
 import { Input, Textarea } from '@/components/elements/Input'
+import client from "@/utilities/api";
+import { SIGN_UP }  from '@/common/constants/api'
 
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
@@ -42,19 +42,18 @@ const SignUp: FC = () => {
   })
   const onSubmit = async (values) => {
     const { email, password } = values
-    const attributeList = [
-      new CognitoUserAttribute({
-        Name: 'email',
-        Value: email,
-      }),
-    ]
-    getUserPool().signUp(email, password, attributeList, [], (err, result) => {
-      if (err) {
-        console.error(err)
-        return
-      }
-      router.push(URL.SIGNUP_VERIFICATION)
-    })
+    console.log(values)
+    const { data } = await client.mutate({
+      mutation: SIGN_UP,
+      variables: {
+        email,
+        password,
+
+      },
+    });
+    console.log("login success!", data)
+    localStorage.setItem('authentication', data.token);
+    router.push(URL.MEMBER)
   }
 
   const initialValues = {

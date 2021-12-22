@@ -1,12 +1,6 @@
 import React, { useEffect, useState, FC, useContext } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import {
-  CognitoUser,
-  CognitoUserAttribute,
-  AuthenticationDetails,
-} from 'amazon-cognito-identity-js'
-import { getUserPool } from '../../utilities/aws'
 import { URL } from '@/common/constants/url'
 import Layout from '@/components/Layout'
 import Head from '@/components/pages/Head'
@@ -20,6 +14,8 @@ import {
   CardHeader,
 } from '@material-ui/core'
 import { Input, Textarea } from '@/components/elements/Input'
+import client from "@/utilities/api";
+import { SIGN_IN }  from '@/common/constants/api'
 
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
@@ -46,32 +42,16 @@ const Login: FC = () => {
   })
   const onSubmit = async (values) => {
     const { email, password } = values
-    const authenticationDetails = new AuthenticationDetails({
-      Username: email,
-      Password: password,
-    })
-    const cognitoUser = new CognitoUser({
-      Username: email,
-      Pool: getUserPool(),
-    })
-
-    cognitoUser.authenticateUser(authenticationDetails, {
-      onSuccess: (result) => {
-        console.log('result: ' + result)
-        const accessToken = result.getAccessToken().getJwtToken()
-        console.log('AccessToken: ' + accessToken)
-        router.push(URL.HOME)
+    const { data } = await client.mutate({
+      mutation: SIGN_IN,
+      variables: {
+        email,
+        password
       },
-      onFailure: (err) => {
-        console.error(err)
-        alert(err.message)
-      },
-      // newPasswordRequired: function (userAttributes, requiredAttributes) {
-      //   // コンソールからユーザを登録した場合、初回認証時に強制的にパスワードを変える必要がある。
-      //   // https://qiita.com/k_hoso/items/afe9aa8183b8bf0651a1
-      //   cognitoUser.completeNewPasswordChallenge('Test@1234', {}, this)
-      // },
-    })
+    });
+    console.log("login success!", data)
+    localStorage.setItem('authentication', data.token);
+    router.push(URL.MEMBER)
   }
 
   const initialValues = {

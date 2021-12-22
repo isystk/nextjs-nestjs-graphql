@@ -1,9 +1,8 @@
 import React, { FC, createContext, useEffect, useState, ReactNode } from 'react'
-import { CognitoUser, CognitoUserAttribute } from 'amazon-cognito-identity-js'
-import { getUserPool } from '../utilities/aws'
+import { User } from '@/store/StoreTypes'
 
 type AuthContextProps = {
-  currentUser: CognitoUser | null | undefined
+  currentUser: User | null | undefined
 }
 
 const AuthContext = createContext<AuthContextProps>({ currentUser: undefined })

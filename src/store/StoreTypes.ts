@@ -20,3 +20,9 @@ export type Parts = {
   isShowLoading: boolean
   isSideMenuOpen: boolean
 }
+
+export type User = {
+  id: number
+  email: string
+  token: string
+}

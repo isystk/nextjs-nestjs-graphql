@@ -129,6 +129,18 @@ $ curl -X POST -d "${QUERY}" -H 'Content-Type: application/json' http://localhos
 
 # データを登録する場合はMutationを利用します。
 -----
+# ユーザ登録
+mutation {
+    signup(
+      email: "test@test.com"
+    	password: "test1234"
+      name: "test"
+    ) {
+    token
+  }
+}
+
+＃ 投稿
 mutation {
   createPost(
     title:"titleA", 
