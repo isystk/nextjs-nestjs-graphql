@@ -1,5 +1,4 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import * as bcrypt from 'bcrypt';
 
 @ObjectType()
 export class User {
