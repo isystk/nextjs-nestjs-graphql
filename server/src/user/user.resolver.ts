@@ -1,9 +1,11 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { PrismaService } from 'src/prisma.service';
+import { UseGuards, Req } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
 import { User, UserToken } from './models/user.model';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { ApolloServer, UserInputError, AuthenticationError } from 'apollo-server-express';
+import { GqAuthGuard } from '../auth/guards/auth.guard';
 
 type JWT_TOKEN = {
   id: number
@@ -62,18 +64,10 @@ export class UserResolver {
 
   // 認証
   @Mutation(() => User)
+  @UseGuards(GqAuthGuard)
   async auth(
       @Args('token') token: string,
   ) {
-    // // リクエストヘッダーからトークンの取得
-    // let token = '';
-    // if (req.headers.authorization &&
-    //     req.headers.authorization.split(' ')[0] === 'Bearer') {
-    //   token = req.headers.authorization.split(' ')[1];
-    // } else {
-    //   throw new AuthenticationError('No Authorization Bearer');
-    // }
-
     // トークンの検証
     return await jwt.verify(token, 'my_secret', async (err: any, decoded: JWT_TOKEN) => {
       if (err) {

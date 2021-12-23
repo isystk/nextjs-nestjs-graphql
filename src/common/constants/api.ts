@@ -58,10 +58,7 @@ export const AUTH = gql`
 
 // My投稿一覧
 export const GET_MY_POSTS = gql`
-  mutation getMyPosts($authorId: Float!, $token: String!) {
-    auth(token: $token) {
-      id
-    }
+  mutation getMyPosts($authorId: Float!) {
     getMyPosts(authorId: $authorId) {
       id
       title
@@ -74,10 +71,7 @@ export const GET_MY_POSTS = gql`
 
 // My投稿詳細
 export const GET_MY_POST = gql`
-  mutation getMyPost($id: Float!, $token: String!) {
-    auth(token: $token) {
-      id
-    }
+  mutation getMyPost($id: Float!) {
     getMyPost(id: $id) {
       id
       title
@@ -97,11 +91,7 @@ export const CREATE_POST = gql`
     $description: String!
     $photo: String!
     $authorId: Float!
-    $token: String!
   ) {
-    auth(token: $token) {
-      id
-    }
     createPost(
       title: $title
       description: $description
@@ -124,11 +114,7 @@ export const UPDATE_POST = gql`
     $description: String!
     $photo: String!
     $authorId: Float!
-    $token: String!
   ) {
-    auth(token: $token) {
-      id
-    }
     updatePost(
       id: $id
       title: $title
@@ -146,10 +132,7 @@ export const UPDATE_POST = gql`
 
 // 投稿削除
 export const DELETE_POST = gql`
-  mutation deletePost($id: Float!, $token: String!) {
-    auth(token: $token) {
-      id
-    }
+  mutation deletePost($id: Float!) {
     deletePost(id: $id) {
       id
     }

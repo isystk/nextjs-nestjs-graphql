@@ -10,41 +10,37 @@ import * as _ from 'lodash'
 import client from '@/utilities/api'
 import { Post } from '@/store/StoreTypes'
 
-const requestGetMemberPosts = async (token: string, userId: number) => {
+const requestGetMemberPosts = async (userId: number) => {
   const { data } = await client.mutate({
     mutation: GET_MY_POSTS,
     variables: {
-      token,
       authorId: userId,
     },
   })
   return { data: data.getMyPosts }
 }
 
-const requestGetMemberPost = async (token: string, id: number) => {
+const requestGetMemberPost = async (id: number) => {
   const { data } = await client.mutate({
     mutation: GET_MY_POST,
     variables: {
-      token,
       id,
     },
   })
   return { data: data.getMyPost }
 }
 
-const requestPostMemberPost = async (token: string, values: Post) => {
+const requestPostMemberPost = async (values: Post) => {
   const { data } = await client.mutate({
     mutation: CREATE_POST,
     variables: {
       ...values,
-      token,
     },
   })
   return { data: data.createPost }
 }
 
 const requestPutMemberPost = async (
-  token: string,
   id: number,
   values: Post
 ) => {
@@ -52,18 +48,16 @@ const requestPutMemberPost = async (
     mutation: UPDATE_POST,
     variables: {
       ...values,
-      token,
       id,
     },
   })
   return { data: data.updatePost }
 }
 
-const requestDeleteMemberPost = async (token: string, id: number) => {
+const requestDeleteMemberPost = async (id: number) => {
   const { data } = await client.mutate({
     mutation: DELETE_POST,
     variables: {
-      token,
       id,
     },
   })
@@ -124,34 +118,34 @@ const request = (func) => async (dispatch) => {
 }
 
 // 外部からはこの関数を呼んでもらう
-export const getMemberPosts = (token: string, userId: number) => async (
+export const getMemberPosts = (userId: number) => async (
   dispatch
 ) => {
   dispatch(
-    request(fetchMemberPosts(await requestGetMemberPosts(token, userId)))
+    request(fetchMemberPosts(await requestGetMemberPosts(userId)))
   )
 }
-export const getMemberPost = (token: string, id: number) => async (
+export const getMemberPost = (id: number) => async (
   dispatch
 ) => {
-  dispatch(request(fetchMemberPost(await requestGetMemberPost(token, id))))
+  dispatch(request(fetchMemberPost(await requestGetMemberPost(id))))
 }
-export const postMemberPost = (token: string, value: Post) => async (
+export const postMemberPost = (value: Post) => async (
   dispatch
 ) => {
-  dispatch(request(fetchMemberPost(await requestPostMemberPost(token, value))))
+  dispatch(request(fetchMemberPost(await requestPostMemberPost(value))))
 }
-export const putMemberPost = (token: string, id: number, value: Post) => async (
+export const putMemberPost = (id: number, value: Post) => async (
   dispatch
 ) => {
   dispatch(
-    request(fetchMemberPost(await requestPutMemberPost(token, id, value)))
+    request(fetchMemberPost(await requestPutMemberPost(id, value)))
   )
 }
-export const deleteMemberPost = (token: string, id: number) => async (
+export const deleteMemberPost = (id: number) => async (
   dispatch
 ) => {
-  dispatch(request(unfetchMemberPost(await requestDeleteMemberPost(token, id))))
+  dispatch(request(unfetchMemberPost(await requestDeleteMemberPost(id))))
 }
 
 // Selectors

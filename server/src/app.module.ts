@@ -3,8 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PrismaService } from './prisma.service';
-import { PostResolver } from './posts/post.resolver';
-import { UserResolver } from './posts/user.resolver';
+import { PostResolver } from './post/post.resolver';
+import { UserResolver } from './user/user.resolver';
 import { join } from 'path';
 
 @Module({

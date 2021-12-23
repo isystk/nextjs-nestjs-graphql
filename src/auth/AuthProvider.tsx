@@ -46,7 +46,7 @@ const AuthProvider: VFC = ({ children }: Props) => {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('authorization')
+    const token = localStorage.getItem('token')
     setToken(token)
   })
 
@@ -68,7 +68,7 @@ const AuthProvider: VFC = ({ children }: Props) => {
   const login = (token) => {
     setLoading(true)
     setToken(token)
-    localStorage.setItem('authorization', token)
+    localStorage.setItem('token', token)
   }
 
   const logout = () => {

@@ -51,7 +51,7 @@ const MemberPostsForm: FC<Props> = (props: Props) => {
     // パスの投稿IDから投稿データを取得する
     ;(async () => {
       if (postId) {
-        await dispatch(getMemberPost(user.token, Number(postId)))
+        await dispatch(getMemberPost(Number(postId)))
         setNowLoading(false)
       } else {
         setNowLoading(false)
@@ -107,9 +107,9 @@ const MemberPostsForm: FC<Props> = (props: Props) => {
     dispatch(showLoading())
     const data = { ...values, authorId: Number(user.id) }
     if (isEdit) {
-      await dispatch(putMemberPost(user.token, Number(postId), data))
+      await dispatch(putMemberPost(Number(postId), data))
     } else {
-      await dispatch(postMemberPost(user.token, data))
+      await dispatch(postMemberPost(data))
     }
     // マイページTOPに画面遷移する
     router.push(URL.MEMBER)
@@ -123,7 +123,7 @@ const MemberPostsForm: FC<Props> = (props: Props) => {
     }
     // ローディング表示
     dispatch(showLoading())
-    await dispatch(deleteMemberPost(user.token, Number(postId)))
+    await dispatch(deleteMemberPost(Number(postId)))
     // マイページTOPに画面遷移する
     router.push(URL.MEMBER)
     // ローディング非表示
