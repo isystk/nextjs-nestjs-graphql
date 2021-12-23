@@ -40,10 +40,7 @@ const requestPostMemberPost = async (values: Post) => {
   return { data: data.createPost }
 }
 
-const requestPutMemberPost = async (
-  id: number,
-  values: Post
-) => {
+const requestPutMemberPost = async (id: number, values: Post) => {
   const { data } = await client.mutate({
     mutation: UPDATE_POST,
     variables: {
@@ -118,33 +115,19 @@ const request = (func) => async (dispatch) => {
 }
 
 // 外部からはこの関数を呼んでもらう
-export const getMemberPosts = (userId: number) => async (
-  dispatch
-) => {
-  dispatch(
-    request(fetchMemberPosts(await requestGetMemberPosts(userId)))
-  )
+export const getMemberPosts = (userId: number) => async (dispatch) => {
+  dispatch(request(fetchMemberPosts(await requestGetMemberPosts(userId))))
 }
-export const getMemberPost = (id: number) => async (
-  dispatch
-) => {
+export const getMemberPost = (id: number) => async (dispatch) => {
   dispatch(request(fetchMemberPost(await requestGetMemberPost(id))))
 }
-export const postMemberPost = (value: Post) => async (
-  dispatch
-) => {
+export const postMemberPost = (value: Post) => async (dispatch) => {
   dispatch(request(fetchMemberPost(await requestPostMemberPost(value))))
 }
-export const putMemberPost = (id: number, value: Post) => async (
-  dispatch
-) => {
-  dispatch(
-    request(fetchMemberPost(await requestPutMemberPost(id, value)))
-  )
+export const putMemberPost = (id: number, value: Post) => async (dispatch) => {
+  dispatch(request(fetchMemberPost(await requestPutMemberPost(id, value))))
 }
-export const deleteMemberPost = (id: number) => async (
-  dispatch
-) => {
+export const deleteMemberPost = (id: number) => async (dispatch) => {
   dispatch(request(unfetchMemberPost(await requestDeleteMemberPost(id))))
 }
 

@@ -1,7 +1,13 @@
-import { ApolloClient, HttpLink, ApolloLink, InMemoryCache, concat } from '@apollo/client'
+import {
+  ApolloClient,
+  HttpLink,
+  ApolloLink,
+  InMemoryCache,
+  concat,
+} from '@apollo/client'
 import Env from '../common/env/'
 
-const httpLink = new HttpLink({ uri: Env.externalEndpointUrl });
+const httpLink = new HttpLink({ uri: Env.externalEndpointUrl })
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
@@ -9,9 +15,9 @@ const authMiddleware = new ApolloLink((operation, forward) => {
     headers: {
       ...headers,
       authorization: 'Bearer ' + localStorage.getItem('token') || null,
-    }
-  }));
-  return forward(operation);
+    },
+  }))
+  return forward(operation)
 })
 
 const client = new ApolloClient({
