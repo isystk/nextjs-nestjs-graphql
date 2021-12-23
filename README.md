@@ -40,8 +40,15 @@ Next.js（フロントエンド）・Nest.js（サーバーサイド）・GraghQ
 
 ```
 .
-├── public/
+├── docker/
+│   ├── mysql/
+│   └── docker-compose.yml
+├── server/ (Nest.js のソースコード)
+│   ├── prisma/
+│   ├── src/
+│   └── test/
 ├── src/ (Next.js のソースコード)
+│   ├── @types/
 │   ├── auth/
 │   ├── common/
 │   ├── components/
@@ -67,7 +74,7 @@ $ ./dc.sh start
 # MySQLにログインしてみる
 $ ./dc.sh mysql login
 
-cd ./server
+$ cd ./server
 
 # 環境ファイルを用意する
 $ cp .env.example .env
@@ -84,7 +91,7 @@ $ yarn start
 
 ### Prisma Studio を起動する
 ```
-cd server
+$ cd server
 $ npx prisma studio
 ```
 ![prisma](./server/prisma.png "prisma")
@@ -161,8 +168,8 @@ $ ./dc.sh stop
 
 クライアントサイド
 ```
-yarn
-yarn dev
+$ yarn
+$ yarn dev
 ```
 
 ## 🎨 参考
