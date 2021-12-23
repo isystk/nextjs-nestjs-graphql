@@ -58,7 +58,7 @@ export const AUTH = gql`
 
 // My投稿一覧
 export const GET_MY_POSTS = gql`
-  mutation getMyPosts($authorId: Float!) {
+  query getMyPosts($authorId: Float!) {
     getMyPosts(authorId: $authorId) {
       id
       title
@@ -71,7 +71,7 @@ export const GET_MY_POSTS = gql`
 
 // My投稿詳細
 export const GET_MY_POST = gql`
-  mutation getMyPost($id: Float!) {
+  query getMyPost($id: Float!) {
     getMyPost(id: $id) {
       id
       title

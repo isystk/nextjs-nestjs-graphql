@@ -13,7 +13,7 @@ type JWT_TOKEN = {
 }
 
 @Injectable()
-export class GqAuthGuard implements CanActivate {
+export class GqlAuthGuard implements CanActivate {
   constructor(
       private prisma: PrismaService
   ) {}

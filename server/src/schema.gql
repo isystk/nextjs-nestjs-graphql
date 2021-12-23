@@ -31,11 +31,11 @@ type UserToken {
 type Query {
   getPosts: [Post!]!
   findPost(id: Float!): Post!
+  getMyPosts(authorId: Float!): [Post!]!
+  getMyPost(id: Float!): Post!
 }
 
 type Mutation {
-  getMyPosts(authorId: Float!): [Post!]!
-  getMyPost(id: Float!): Post!
   createPost(authorId: Float!, photo: String!, description: String!, title: String!): Post!
   updatePost(authorId: Float!, photo: String!, description: String!, title: String!, id: Float!): Post!
   deletePost(id: Float!): Post!

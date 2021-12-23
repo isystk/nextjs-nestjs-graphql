@@ -5,7 +5,7 @@ import { User, UserToken } from './models/user.model';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { ApolloServer, UserInputError, AuthenticationError } from 'apollo-server-express';
-import { GqAuthGuard } from '../auth/guards/auth.guard';
+import { GqlAuthGuard } from '../auth/guards/auth.guard';
 
 type JWT_TOKEN = {
   id: number
@@ -64,7 +64,7 @@ export class UserResolver {
 
   // 認証
   @Mutation(() => User)
-  @UseGuards(GqAuthGuard)
+  @UseGuards(GqlAuthGuard)
   async auth(
       @Args('token') token: string,
   ) {

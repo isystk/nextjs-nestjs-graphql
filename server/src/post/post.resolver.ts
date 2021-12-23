@@ -2,7 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Post } from './models/post.model';
-import { GqAuthGuard } from '../auth/guards/auth.guard';
+import { GqlAuthGuard } from '../auth/guards/auth.guard';
 
 @Resolver(() => Post)
 export class PostResolver {
@@ -22,8 +22,8 @@ export class PostResolver {
     });
   }
 
-  @Mutation(() => [Post])
-  @UseGuards(GqAuthGuard)
+  @Query(() => [Post])
+  @UseGuards(GqlAuthGuard)
   async getMyPosts(@Args('authorId') authorId: number) {
     return this.prisma.post.findMany({
       where: {
@@ -32,8 +32,8 @@ export class PostResolver {
     });
   }
 
-  @Mutation(() => Post)
-  @UseGuards(GqAuthGuard)
+  @Query(() => Post)
+  @UseGuards(GqlAuthGuard)
   async getMyPost(@Args('id') id: number) {
     return this.prisma.post.findUnique({
       where: {
@@ -43,7 +43,7 @@ export class PostResolver {
   }
 
   @Mutation(() => Post)
-  @UseGuards(GqAuthGuard)
+  @UseGuards(GqlAuthGuard)
   async createPost(
       @Args('title') title: string,
       @Args('description') description: string,
@@ -54,7 +54,7 @@ export class PostResolver {
   }
 
   @Mutation(() => Post)
-  @UseGuards(GqAuthGuard)
+  @UseGuards(GqlAuthGuard)
   async updatePost(
       @Args('id') id: number,
       @Args('title') title: string,
@@ -69,7 +69,7 @@ export class PostResolver {
   }
 
   @Mutation(() => Post)
-  @UseGuards(GqAuthGuard)
+  @UseGuards(GqlAuthGuard)
   async deletePost(
     @Args('id') id: number,
   ) {
