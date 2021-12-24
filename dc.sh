@@ -19,6 +19,8 @@ Options:
   mysql export <PAHT>      MySQLデータベースのdumpファイルをエクスポートします。
   mysql import <PAHT>      MySQLデータベースにdumpファイルをインポートします。
   mysql restart            MySQLデータベースを再起動します。
+  server login             Nest.jsのサーバーにログインします。
+  server prisma            Prisma Studio を起動します。
   --version, -v     バージョンを表示します。
   --help, -h        ヘルプを表示します。
 EOF
@@ -66,6 +68,20 @@ case ${1} in
           ;;
           restart)
               $DOCKER_COMPOSE restart mysql
+          ;;
+          *)
+              usage
+          ;;
+      esac
+    ;;
+
+    server)
+      case ${2} in
+          login)
+              $DOCKER_COMPOSE exec nestjs /bin/bash
+          ;;
+          prisma)
+              $DOCKER_COMPOSE exec nestjs npx prisma studio
           ;;
           *)
               usage

@@ -10,7 +10,7 @@
 
 # next.js
 /.next/
-#/out/
+/out/
 
 # production
 /build
@@ -25,15 +25,18 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
+# editor
+.vscode
+.idea
+
 # vercel
 .vercel
-
-.env
 
 docker/mysql/data
 docker/mysql/logs

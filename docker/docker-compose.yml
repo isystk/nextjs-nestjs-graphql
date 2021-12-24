@@ -22,3 +22,21 @@ services:
       - ./mysql/logs:/var/log/mysql
       - ./mysql/conf:/etc/mysql/conf.d
 
+  nestjs:
+     image: sample/nestjs
+     container_name: sample-nestjs
+     build:
+       context: ./nestjs
+       dockerfile: Dockerfile
+     volumes:
+       - ./nestjs/app:/usr/src
+     tty: true
+     ports:
+       - 9000:3000
+       - 5555:5555
+     restart: always
+#     network_mode: "host"
+     working_dir: /usr/src
+     depends_on:
+       - mysql
+     command: sh -c "yarn && npx prisma migrate dev --name post && yarn start"

@@ -61,7 +61,7 @@ Next.js（フロントエンド）・Nest.js（サーバーサイド）・GraghQ
 
 ## 💬 使い方
 
-サーバーサイド
+### サーバーサイド
 ```
 # 下準備
 $ ./dc.sh init
@@ -87,16 +87,12 @@ $ npx prisma migrate dev --name post
 
 # アプリを起動する
 $ yarn start
+
+# Dockerを停止する場合
+$ ./dc.sh stop
 ```
 
-### Prisma Studio を起動する
-```
-$ cd server
-$ npx prisma studio
-```
-![prisma](./server/prisma.png "prisma")
-
-### GraghQLの使い方
+#### GraghQLの使い方
 http://localhost:9000/graphql
 
 ![graphql](./server/graphql.png "graphql")
@@ -161,16 +157,21 @@ mutation {
   }
 }
 -----
-
-# Dockerを停止する場合
-$ ./dc.sh stop
 ```
 
-クライアントサイド
+#### Prisma Studio を起動する
+http://localhost:5555
+```
+$ ./dc.sh server prisma
+```
+![prisma](./server/prisma.png "prisma")
+
+### クライアントサイド
 ```
 $ yarn
 $ yarn dev
 ```
+http://localhost:3000
 
 ## 🎨 参考
 
