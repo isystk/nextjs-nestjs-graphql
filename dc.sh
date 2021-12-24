@@ -20,7 +20,9 @@ Options:
   mysql import <PAHT>      MySQLデータベースにdumpファイルをインポートします。
   mysql restart            MySQLデータベースを再起動します。
   server login             Nest.jsのサーバーにログインします。
-  server prisma            Prisma Studio を起動します。
+  server start             Nest.jsを起動します。
+  prisma studio            Prisma Studio を起動します。
+  prisma migrate           Prisma の Migrate を実行します。
   --version, -v     バージョンを表示します。
   --help, -h        ヘルプを表示します。
 EOF
@@ -80,8 +82,22 @@ case ${1} in
           login)
               $DOCKER_COMPOSE exec nestjs /bin/bash
           ;;
-          prisma)
+          start)
+              $DOCKER_COMPOSE exec nestjs yarn start
+          ;;
+          *)
+              usage
+          ;;
+      esac
+    ;;
+
+    prisma)
+      case ${2} in
+          studio)
               $DOCKER_COMPOSE exec nestjs npx prisma studio
+          ;;
+          migrate)
+              $DOCKER_COMPOSE exec nestjs npx prisma migrate dev --name post
           ;;
           *)
               usage

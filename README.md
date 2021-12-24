@@ -75,6 +75,12 @@ $ ./dc.sh start
 # MySQLにログインしてみる
 $ ./dc.sh mysql login
 
+# DBのマイグレーション
+$ ./dc.sh prisma migrate
+
+# サーバーの起動
+$ ./dc.sh server start
+
 # Dockerを停止する場合
 $ ./dc.sh stop
 ```
