@@ -42,11 +42,12 @@ Next.js（フロントエンド）・Nest.js（サーバーサイド）・GraghQ
 .
 ├── docker/
 │   ├── mysql/
+│   ├── nestjs/
+│   │   └── app/ (Nest.js のソースコード)
+│   │       ├── prisma/
+│   │       ├── src/
+│   │       └── test/
 │   └── docker-compose.yml
-├── server/ (Nest.js のソースコード)
-│   ├── prisma/
-│   ├── src/
-│   └── test/
 ├── src/ (Next.js のソースコード)
 │   ├── @types/
 │   ├── auth/
@@ -73,20 +74,6 @@ $ ./dc.sh start
 
 # MySQLにログインしてみる
 $ ./dc.sh mysql login
-
-$ cd ./server
-
-# 環境ファイルを用意する
-$ cp .env.example .env
-
-# 外部モジュールをインストール
-$ yarn
-
-# Prisma でテーブルを作成する
-$ npx prisma migrate dev --name post
-
-# アプリを起動する
-$ yarn start
 
 # Dockerを停止する場合
 $ ./dc.sh stop
