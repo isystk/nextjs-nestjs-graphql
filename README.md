@@ -88,7 +88,7 @@ $ ./dc.sh stop
 #### GraghQLの使い方
 http://localhost:9000/graphql
 
-![graphql](./server/graphql.png "graphql")
+![graphql](./graphql.png "graphql")
 ```
 # 以下のように必要なフィールドのみを指定してデータを取得できます。
 -----
@@ -157,7 +157,7 @@ http://localhost:5555
 ```
 $ ./dc.sh server prisma
 ```
-![prisma](./server/prisma.png "prisma")
+![prisma](./prisma.png "prisma")
 
 ### クライアントサイド
 ```
