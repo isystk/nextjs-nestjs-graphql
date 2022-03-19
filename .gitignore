@@ -1,0 +1,10 @@
+
+# editor
+.vscode
+.idea
+
+# vercel
+.vercel
+
+docker/mysql/data
+docker/mysql/logs

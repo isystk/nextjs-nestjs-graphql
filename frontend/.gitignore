@@ -30,13 +30,3 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
-
-# editor
-.vscode
-.idea
-
-# vercel
-.vercel
-
-docker/mysql/data
-docker/mysql/logs
