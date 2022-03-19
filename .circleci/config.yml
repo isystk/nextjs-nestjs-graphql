@@ -7,14 +7,12 @@ executors:
 
 commands:
   restore_npm:
-    working_directory: ~/nextjs-nestjs-graphql/frontend
     steps:
       - restore_cache:
           name: Restore npm dependencies
           key: npm-{{ checksum "yarn.lock" }}
   
   save_npm:
-    working_directory: ~/nextjs-nestjs-graphql/frontend
     steps:
       - save_cache:
           name: Cache npm dependencies
@@ -23,7 +21,6 @@ commands:
             - ~/nextjs-nestjs-graphql/frontend/node_modules
 
 jobs:
-  working_directory: ~/nextjs-nestjs-graphql/frontend
   setup:
     executor:
       name: default
@@ -70,6 +67,7 @@ jobs:
 workflows:
   version: 2
   build_and_test:
+    working_directory: ~/nextjs-nestjs-graphql/frontend
     jobs:
       - setup
       - lint:
