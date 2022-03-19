@@ -1,6 +1,6 @@
 version: 2.1
 executors:
-  default:
+  frontend:
     working_directory: ~/nextjs-nestjs-graphql/frontend
     docker:
       - image: node:14
@@ -22,9 +22,8 @@ commands:
 
 jobs:
   setup:
-    working_directory: ~/nextjs-nestjs-graphql/frontend
     executor:
-      name: default
+      name: frontend
     steps:
       - checkout
       - run:
@@ -33,9 +32,8 @@ jobs:
       - save_npm
 
   lint:
-    working_directory: ~/nextjs-nestjs-graphql/frontend
     executor:
-      name: default
+      name: frontend
     steps:
       - checkout
       - restore_npm
@@ -45,9 +43,8 @@ jobs:
       - save_npm
 
   build:
-    working_directory: ~/nextjs-nestjs-graphql/frontend
     executor:
-      name: default
+      name: frontend
     steps:
       - checkout
       - restore_npm
@@ -57,9 +54,8 @@ jobs:
       - save_npm
 
   test:
-    working_directory: ~/nextjs-nestjs-graphql/frontend
     executor:
-      name: default
+      name: frontend
     steps:
       - checkout
       - restore_npm
