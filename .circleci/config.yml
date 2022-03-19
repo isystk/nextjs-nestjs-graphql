@@ -1,7 +1,7 @@
 version: 2.1
 executors:
   default:
-    working_directory: ~/nextjs-nestjs-graphql
+    working_directory: ~/nextjs-nestjs-graphql/frontend
     docker:
       - image: node:14
 
@@ -10,13 +10,13 @@ commands:
     steps:
       - restore_cache:
           name: Restore npm dependencies
-          key: npm-v1-{{ checksum "frontend/yarn.lock" }}
+          key: npm-v1-{{ checksum "yarn.lock" }}
 
   save_npm:
     steps:
       - save_cache:
           name: Cache npm dependencies
-          key: npm-v1-{{ checksum "frontend/yarn.lock" }}
+          key: npm-v1-{{ checksum "yarn.lock" }}
           paths:
             - ~/nextjs-nestjs-graphql/frontend/node_modules
 
