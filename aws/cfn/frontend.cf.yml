@@ -1,0 +1,112 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Create nextjs-nestjs-graphql base
+
+################# Input parameters ###############
+Parameters:
+  Prefix:
+    Default: isystk
+    Type: String
+  VpcId:
+    Description : Input 'isystk' VPC ID
+    Type: AWS::EC2::VPC::Id
+# ALB
+  ALBSecurityGroupId:
+    Description: Input 'ingress' SecurityGroup ID
+    Type: AWS::EC2::SecurityGroup::Id
+  ALBSubnetId1:
+    Description : Input 'ingress' Subnet ID for ap-northeast-1a
+    Type : AWS::EC2::Subnet::Id
+  ALBSubnetId2:
+    Description : Input 'ingress' Subnet ID for ap-northeast-1c
+    Type : AWS::EC2::Subnet::Id
+# Backend loadbalancer
+  BackendHost:
+    Description : Input DNS A record of backend ALB
+    Type: String
+    Default: http://internal-isystk-alb-internal-XXXXXXXXX.ap-northeast-1.elb.amazonaws.com
+
+
+Resources:
+  ############### ECS ###############
+  isystkECSClusterNextjsNestjsGraphql:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub "${Prefix}-nextjs-nestjs-graphql-cluster"
+  isystkTaskDefinitionNextjsNestjsGraphql:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub "${Prefix}-nextjs-nestjs-graphql-def"
+      ContainerDefinitions:
+        - Name: app
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/nextjs-nestjs-graphql.isystk.com:latest"
+          Essential: true
+          Cpu: 256
+          MemoryReservation: 512
+          PortMappings:
+            - ContainerPort: 80
+              HostPort: 80
+              Protocol: tcp
+          Environment:
+            - Name: internalEndpointUrl
+              Value: !Sub "${BackendHost}"
+            - Name: externalEndpointUrl
+              Value: !Sub "${BackendHost}"
+          LogConfiguration:
+              LogDriver: awslogs
+              Options:
+                awslogs-group: !Sub "/ecs/${Prefix}-nextjs-nestjs-graphql-def"
+                awslogs-region: !Ref AWS::Region
+                awslogs-stream-prefix: ecs
+      Cpu: 512
+      Memory: 1024
+      ExecutionRoleArn: !Sub "arn:aws:iam::${AWS::AccountId}:role/ecsTaskExecutionRole"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+  isystkCloudWatchLogsNextjsNestjsGraphql:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /ecs/isystk-nextjs-nestjs-graphql-def
+      RetentionInDays: 14
+    UpdateReplacePolicy: Retain
+
+  ############### Application Load Balancer ###############
+  isystkAlbNextjsNestjsGraphql:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Sub "${Prefix}-alb-ingress-nextjs-nestjs-graphql"
+      Type: application
+      Scheme: internet-facing
+      SecurityGroups:
+        - !Ref ALBSecurityGroupId
+      Subnets:
+        - !Ref ALBSubnetId1
+        - !Ref ALBSubnetId2
+      LoadBalancerAttributes:
+        - Key: deletion_protection.enabled
+          Value: false
+  isystkTargetGroupNextjsNestjsGraphql:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub "${Prefix}-tg-nextjs-nestjs-graphql"
+      Port: 80
+      Protocol: HTTP
+      TargetType: ip
+      HealthCheckIntervalSeconds: 15
+      HealthCheckPath: /
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 3
+      UnhealthyThresholdCount: 2
+      Matcher:
+        HttpCode: 200
+      VpcId: !Ref VpcId
+  isystkNextjsNestjsGraphqlListener1:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+        DefaultActions:
+          - TargetGroupArn: !Ref isystkTargetGroupNextjsNestjsGraphql
+            Type: forward
+        LoadBalancerArn: !Ref isystkAlbNextjsNestjsGraphql
+        Port: 80
+        Protocol: HTTP
+

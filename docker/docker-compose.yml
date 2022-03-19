@@ -3,8 +3,8 @@ version: '3'
 services:
 
   mysql:
-    image: sample/mysql
-    container_name: sample-mysql
+    image: nextjs-nestjs-graphql/mysql
+    container_name: nextjs-nestjs-graphql-mysql
     build:
       context: ./mysql
       dockerfile: Dockerfile
@@ -18,24 +18,9 @@ services:
      - 3306:3306
     restart: always
     volumes:
-      - ./mysql/data:/var/lib/mysql
+      - nextjs-nestjs-graphql-mysql-store:/var/lib/mysql
       - ./mysql/logs:/var/log/mysql
       - ./mysql/conf:/etc/mysql/conf.d
 
-  nestjs:
-     image: sample/nestjs
-     container_name: sample-nestjs
-     build:
-       context: ./nestjs
-       dockerfile: Dockerfile
-     volumes:
-       - ./nestjs/app/app:/app/src
-     tty: true
-     ports:
-       - 9000:3000
-       - 5555:5555
-     restart: always
-#     network_mode: host
-     working_dir: /app
-     depends_on:
-       - mysql
+volumes:
+  nextjs-nestjs-graphql-mysql-store:

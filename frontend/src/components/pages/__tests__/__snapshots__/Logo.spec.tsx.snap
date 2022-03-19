@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Logo 1`] = `
+<div
+  className="header-logo"
+>
+  <Link
+    href="http://localhost:3000/"
+  >
+    <a
+      style={
+        Object {
+          "color": "#fff",
+          "fontSize": "25px",
+        }
+      }
+    />
+  </Link>
+</div>
+`;

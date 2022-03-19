@@ -1,0 +1,554 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Network resource template part1
+Resources:
+  # VPCの設定
+  isystkVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: isystkVpc
+
+  ############### Subnet, RouteTable, IGW ###############
+  # コンテナ周りの設定
+  ## コンテナアプリ用のプライベートサブネット
+  isystkSubnetPrivateContainer1A:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-1a"
+      CidrBlock: 10.0.8.0/24
+      VpcId:
+        Ref: isystkVpc
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: isystk-subnet-private-container-1a
+        - Key: Type
+          Value: Isolated
+  isystkSubnetPrivateContainer1C:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-1c"
+      CidrBlock: 10.0.9.0/24
+      VpcId:
+        Ref: isystkVpc
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: isystk-subnet-private-container-1c
+        - Key: Type
+          Value: Isolated
+  ## コンテナアプリ用のルートテーブル
+  isystkRouteApp:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: isystkVpc
+      Tags:
+        - Key: Name
+          Value: isystk-route-app
+  ## コンテナサブネットへルート紐付け
+  isystkRouteAppAssociation1A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: isystkRouteApp
+      SubnetId:
+        Ref: isystkSubnetPrivateContainer1A
+  isystkRouteAppAssociation1C:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: isystkRouteApp
+      SubnetId:
+        Ref: isystkSubnetPrivateContainer1C
+
+  # DB周りの設定
+  ## DB用のプライベートサブネット
+  isystkSubnetPrivateDb1A:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-1a"
+      CidrBlock: 10.0.16.0/24
+      VpcId:
+        Ref: isystkVpc
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: isystk-subnet-private-db-1a
+        - Key: Type
+          Value: Isolated
+  isystkSubnetPrivateDb1C:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-1c"
+      CidrBlock: 10.0.17.0/24
+      VpcId:
+        Ref: isystkVpc
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: isystk-subnet-private-db-1c
+        - Key: Type
+          Value: Isolated
+  ## DB用のルートテーブル
+  isystkRouteDb:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: isystkVpc
+      Tags:
+        - Key: Name
+          Value: isystk-route-db
+  ## DBサブネットへルート紐付け
+  isystkRouteDbAssociation1A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: isystkRouteDb
+      SubnetId:
+        Ref: isystkSubnetPrivateDb1A
+  isystkRouteDbAssociation1C:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: isystkRouteDb
+      SubnetId:
+        Ref: isystkSubnetPrivateDb1C
+
+  # Ingress周りの設定
+  ## Ingress用のパブリックサブネット
+  isystkSubnetPublicIngress1A:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-1a"
+      CidrBlock: 10.0.0.0/24
+      VpcId:
+        Ref: isystkVpc
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: isystk-subnet-public-ingress-1a
+        - Key: Type
+          Value: Public
+  isystkSubnetPublicIngress1C:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-1c"
+      CidrBlock: 10.0.1.0/24
+      VpcId:
+        Ref: isystkVpc
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: isystk-subnet-public-ingress-1c
+        - Key: Type
+          Value: Public
+  ## Ingress用のルートテーブル
+  isystkRouteIngress:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: isystkVpc
+      Tags:
+        - Key: Name
+          Value: isystk-route-ingress
+  ## Ingressサブネットへルート紐付け
+  isystkRouteIngressAssociation1A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: isystkRouteIngress
+      SubnetId:
+        Ref: isystkSubnetPublicIngress1A
+  isystkRouteIngressAssociation1C:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: isystkRouteIngress
+      SubnetId:
+        Ref: isystkSubnetPublicIngress1C
+  ## Ingress用ルートテーブルのデフォルトルート
+  isystkRouteIngressDefault:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: isystkRouteIngress
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: isystkIgw
+    DependsOn:
+      - isystkVpcgwAttachment
+
+  # 管理用サーバ周りの設定
+  ## 管理用のパブリックサブネット
+  isystkSubnetPublicManagement1A:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-1a"
+      CidrBlock: 10.0.240.0/24
+      VpcId:
+        Ref: isystkVpc
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: isystk-subnet-public-management-1a
+        - Key: Type
+          Value: Public
+  isystkSubnetPublicManagement1C:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-1c"
+      CidrBlock: 10.0.241.0/24
+      VpcId:
+        Ref: isystkVpc
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: isystk-subnet-public-management-1c
+        - Key: Type
+          Value: Public
+  ## 管理用サブネットのルートはIngressと同様として作成する
+  isystkRouteManagementAssociation1A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: isystkRouteIngress
+      SubnetId:
+        Ref: isystkSubnetPublicManagement1A
+  isystkRouteManagementAssociation1C:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: isystkRouteIngress
+      SubnetId:
+        Ref: isystkSubnetPublicManagement1C
+
+  # インターネットへ通信するためのゲートウェイの作成
+  isystkIgw:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: isystk-igw
+  isystkVpcgwAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: isystkVpc
+      InternetGatewayId:
+        Ref: isystkIgw
+
+  # VPCエンドポイント周りの設定
+  ## VPCエンドポイント(Egress通信)用のプライベートサブネット
+  isystkSubnetPrivateEgress1A:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-1a"
+      CidrBlock: 10.0.248.0/24
+      VpcId:
+        Ref: isystkVpc
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: isystk-subnet-private-egress-1a
+        - Key: Type
+          Value: Isolated
+  isystkSubnetPrivateEgress1C:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-1c"
+      CidrBlock: 10.0.249.0/24
+      VpcId:
+        Ref: isystkVpc
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: isystk-subnet-private-egress-1c
+        - Key: Type
+          Value: Isolated
+
+  ############### Security groups ###############
+  # セキュリティグループの生成
+  ## インターネット公開のセキュリティグループの生成
+  isystkSgIngress:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for ingress
+      GroupName: ingress
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          Description: from 0.0.0.0/0:80
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+        - CidrIpv6: ::/0
+          Description: from ::/0:80
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+      Tags:
+        - Key: Name
+          Value: isystk-sg-ingress
+      VpcId:
+        Ref: isystkVpc
+  ## 管理用サーバ向けのセキュリティグループの生成
+  isystkSgManagement:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group of management server
+      GroupName: management
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: Name
+          Value: isystk-sg-management
+      VpcId:
+        Ref: isystkVpc
+  ## バックエンドコンテナアプリ用セキュリティグループの生成
+  isystkSgContainer:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group of backend app
+      GroupName: container
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: Name
+          Value: isystk-sg-container
+      VpcId:
+        Ref: isystkVpc
+  ## フロントエンドコンテナアプリ用セキュリティグループの生成
+  isystkSgFrontContainer:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group of front container app
+      GroupName: front-container
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: Name
+          Value: isystk-sg-front-container
+      VpcId:
+        Ref: isystkVpc
+  ## 内部用ロードバランサ用のセキュリティグループの生成
+  isystkSgInternal:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for internal load balancer
+      GroupName: internal
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: Name
+          Value: isystk-sg-internal
+      VpcId:
+        Ref: isystkVpc
+  ## DB用セキュリティグループの生成
+  isystkSgDb:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group of database
+      GroupName: database
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: Name
+          Value: isystk-sg-db
+      VpcId:
+        Ref: isystkVpc
+  ## VPCエンドポイント用セキュリティグループの生成
+  isystkSgEgress:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group of VPC Endpoint
+      GroupName: egress
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: Name
+          Value: isystk-sg-vpce
+      VpcId:
+        Ref: isystkVpc
+
+  # ルール紐付け
+  ## Internet LB -> Front Container
+  isystkSgFrontContainerFromsSgIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: HTTP for Ingress
+      FromPort: 80
+      GroupId:
+        Fn::GetAtt:
+          - isystkSgFrontContainer
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - isystkSgIngress
+          - GroupId
+      ToPort: 80
+  ## Front Container -> Internal LB
+  isystkSgInternalFromSgFrontContainer:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: HTTP for front container
+      FromPort: 80
+      GroupId:
+        Fn::GetAtt:
+          - isystkSgInternal
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - isystkSgFrontContainer
+          - GroupId
+      ToPort: 80
+  ## Internal LB -> Back Container
+  isystkSgContainerFromSgInternal:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: HTTP for internal lb
+      FromPort: 80
+      GroupId:
+        Fn::GetAtt:
+          - isystkSgContainer
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - isystkSgInternal
+          - GroupId
+      ToPort: 80
+  ## Back container -> DB
+  isystkSgDbFromSgContainerTCP:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: MySQL protocol from backend App
+      FromPort: 3306
+      GroupId:
+        Fn::GetAtt:
+          - isystkSgDb
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - isystkSgContainer
+          - GroupId
+      ToPort: 3306
+  ## Front container -> DB
+  isystkSgDbFromSgFrontContainerTCP:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: MySQL protocol from frontend App
+      FromPort: 3306
+      GroupId:
+        Fn::GetAtt:
+          - isystkSgDb
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - isystkSgFrontContainer
+          - GroupId
+      ToPort: 3306
+  ## Management server -> DB
+  isystkSgDbFromSgManagementTCP:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: MySQL protocol from management server
+      FromPort: 3306
+      GroupId:
+        Fn::GetAtt:
+          - isystkSgDb
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - isystkSgManagement
+          - GroupId
+      ToPort: 3306
+  ## Management server -> Internal LB
+  isystkSgInternalFromSgManagementTCP:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: HTTP for management server
+      FromPort: 80
+      GroupId:
+        Fn::GetAtt:
+          - isystkSgInternal
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - isystkSgManagement
+          - GroupId
+      ToPort: 80
+  ### Back container -> VPC endpoint
+  isystkSgVpceFromSgContainerTCP:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: HTTPS for Container App
+      FromPort: 443
+      GroupId:
+        Fn::GetAtt:
+          - isystkSgEgress
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - isystkSgContainer
+          - GroupId
+      ToPort: 443
+  ### Front container -> VPC endpoint
+  isystkSgVpceFromSgFrontContainerTCP:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: HTTPS for Front Container App
+      FromPort: 443
+      GroupId:
+        Fn::GetAtt:
+          - isystkSgEgress
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - isystkSgFrontContainer
+          - GroupId
+      ToPort: 443
+  ### Management Server -> VPC endpoint
+  isystkSgVpceFromSgManagementTCP:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: HTTPS for management server
+      FromPort: 443
+      GroupId:
+        Fn::GetAtt:
+          - isystkSgEgress
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - isystkSgManagement
+          - GroupId
+      ToPort: 443

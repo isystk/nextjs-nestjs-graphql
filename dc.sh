@@ -41,7 +41,6 @@ case ${1} in
         # 停止＆削除（コンテナ・イメージ・ボリューム）
         pushd $DOCKER_HOME
         docker-compose down --rmi all --volumes
-        rm -Rf ./mysql/data && mkdir ./mysql/data && chmod 777 ./mysql/data
         rm -Rf ./mysql/logs && mkdir ./mysql/logs && chmod 777 ./mysql/logs
         popd
     ;;
@@ -77,27 +76,17 @@ case ${1} in
       esac
     ;;
 
-    server)
-      case ${2} in
-          login)
-              $DOCKER_COMPOSE exec nestjs /bin/bash
-          ;;
-          start)
-              $DOCKER_COMPOSE exec nestjs yarn start
-          ;;
-          *)
-              usage
-          ;;
-      esac
-    ;;
-
     prisma)
       case ${2} in
           studio)
-              $DOCKER_COMPOSE exec nestjs npx prisma studio
+              pushd backend
+              nestjs npx prisma studio
+              popd
           ;;
           migrate)
-              $DOCKER_COMPOSE exec nestjs npx prisma migrate dev --name post
+              pushd backend
+              nestjs npx prisma migrate dev --name post
+              popd
           ;;
           *)
               usage

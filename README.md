@@ -48,21 +48,22 @@ Next.js（フロントエンド）・Nest.js（サーバーサイド）・GraghQ
 │   │       ├── src/
 │   │       └── test/
 │   └── docker-compose.yml
-├── src/ (Next.js のソースコード)
-│   ├── @types/
-│   ├── auth/
-│   ├── common/
-│   ├── components/
-│   ├── pages/
-│   ├── store/
-│   ├── styles/
-│   └── utilities/
-└── test/
+└── frontend/
+    ├── src/ (Next.js のソースコード)
+    │   ├── @types/
+    │   ├── auth/
+    │   ├── common/
+    │   ├── components/
+    │   ├── pages/
+    │   ├── store/
+    │   ├── styles/
+    │   └── utilities/
+    └── test/
 ```
 
 ## 💬 使い方
 
-### サーバーサイド
+### データベースの準備
 ```
 # 下準備
 $ ./dc.sh init
@@ -75,14 +76,18 @@ $ ./dc.sh start
 # MySQLにログインしてみる
 $ ./dc.sh mysql login
 
-# DBのマイグレーション
-$ ./dc.sh prisma migrate
-
-# サーバーの起動
-$ ./dc.sh server start
-
 # Dockerを停止する場合
 $ ./dc.sh stop
+```
+
+### バックエンドの準備
+```
+$ cd backend
+$ cp .env.example .env
+$ yarn
+$ npx prisma generate
+$ npx prisma migrate dev --name post
+$ yarn start
 ```
 
 #### GraghQLの使い方
@@ -153,14 +158,16 @@ mutation {
 ```
 
 #### Prisma Studio を起動する
-http://localhost:5555
 ```
-$ ./dc.sh server prisma
+$ cd backend
+$ npx prisma studio
 ```
 ![prisma](./prisma.png "prisma")
 
-### クライアントサイド
+### フロントエンド用
 ```
+$ cd frontend
+$ cp .env.example .env
 $ yarn
 $ yarn dev
 ```
