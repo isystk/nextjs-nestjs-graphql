@@ -1,12 +1,15 @@
 FROM node:16.13.1-alpine3.13
 
-WORKDIR /usr/src
+WORKDIR /app
 
 RUN apk update && \
     apk upgrade && \
     apk add bash
 
-RUN yarn install
+COPY . /app/
 
-EXPOSE 3000
+RUN yarn install
+RUN yarn build
+
+EXPOSE 9000
 CMD ["sh", "-c", "npx prisma migrate dev --name post && yarn start"]
