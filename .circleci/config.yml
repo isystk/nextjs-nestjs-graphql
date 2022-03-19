@@ -1,7 +1,7 @@
 version: 2.1
 executors:
   default:
-    working_directory: ~/nextjs-nestjs-graphql/frontend
+    working_directory: ~/nextjs-nestjs-graphql
     docker:
       - image: node:14
 
