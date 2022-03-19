@@ -7,7 +7,7 @@ import {
 } from '@apollo/client'
 import Env from '../common/env/'
 
-const httpLink = new HttpLink({ uri: Env.externalEndpointUrl })
+const httpLink = new HttpLink({ uri: Env.externalEndpointUrl + '/graphql' })
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers

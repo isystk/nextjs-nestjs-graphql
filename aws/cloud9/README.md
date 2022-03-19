@@ -17,22 +17,19 @@ Happy coding!
 ```text
 名前：isystk-dev
 Subnet：management-1a
+上記以外はデフォルトのまま
 ```
 
-セキュリティグループを変更する
-```text
-セキュリティグループの名前：management
-```
+Cloud9のEC2インスタンスのセキュリティグループに managementを追加する（default は残しておく）
 
-IAMロールを変更する
+IAMロールを作成する
 ```text
 ポリシーの名前：isystk-AccessingECRRepositoryPolicy
 ポリシーのJSON：cloud9_ecr_policy.json
 ロールの名前：isystk-cloud9-role
 ロールに適用するポリシー：isystk-AccessingECRRepositoryPolicy
 ```
-
-Cloud9のEC2インスタンスに、上記のIAMロールを設定する
+Cloud9のEC2インスタンスに、上記のIAMロールを適用する
 
 Cloud9の設定画面から、AMTCを無効にする(←有効のままにしないとAWS認証が通らない？)
 
@@ -43,8 +40,8 @@ $ cd /home/ec2-user/environment
 $ pwd
 /home/ec2-user/environment
 
-$ git clone https://github.com/isystk/profile.isystk.com.git
-$ cd ./profile.isystk.com
+$ git clone https://github.com/isystk/nextjs-nestjs-graphql.git
+$ cd ./nextjs-nestjs-graphql
 
 # EBSのサイズを拡張
 $ df -h
@@ -57,15 +54,16 @@ $ df -h
 
 # Node.js のバージョンを変更
 $ node -v
-v16.14.0
+v14.18.1
 $ npm i -g nvm
-$ nvm install v13.13.0
-$ nvm alias default v13.13.0
+$ nvm install v16.14.0
+$ nvm alias default v16.14.0
 $ node -v
-v13.13.0
+v16.14.0
 $ npm i -g yarn
 
-# フロントエンドのモジュールをダウンロード
+# アプリケーションをビルドする
+$ cd backend
 $ yarn
 $ yarn build
 
@@ -74,16 +72,16 @@ $ docker image rm -f $(docker image ls -q)
 $ docker image ls
 
 # Dockerイメージを作成
-$ docker image build -t profile.isystk.com:v1 .
+$ docker image build -t nextjs-nestjs-graphql-backend:v1 .
 $ AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
-$ docker image tag profile.isystk.com:v1 ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/profile.isystk.com:v1
+$ docker image tag nextjs-nestjs-graphql-backend:v1 ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-nestjs-graphql-backend:v1
 $ docker image ls
 REPOSITORY                                                        TAG                 IMAGE ID       CREATED         SIZE
-004796740041.dkr.ecr.ap-northeast-1.amazonaws.com/profile.isystk.com   v1                  6cb9b4b9d269   3 minutes ago   28.3MB
+004796740041.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-nestjs-graphql-backend   v1                  6cb9b4b9d269   3 minutes ago   28.3MB
 
 # ECRにログインしてコンテナイメージをPush
-$ aws ecr --region ap-northeast-1 get-login-password | docker login --username AWS --password-stdin https://${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/profile.isystk.com
-$ docker image push ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/profile.isystk.com:v1
+$ aws ecr --region ap-northeast-1 get-login-password | docker login --username AWS --password-stdin https://${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-nestjs-graphql-backend
+$ docker image push ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-nestjs-graphql-backend:v1
 
 
 # 作成したDockerイメージを削除しておく
@@ -91,15 +89,20 @@ $ docker image rm -f $(docker image ls -q)
 $ docker image ls
 
 # ECRからコンテナイメージを取得する
-$ docker image pull ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/profile.isystk.com:v1
+$ docker image pull ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-nestjs-graphql-backend:v1
 
 # Dockerコンテナを起動する
-$ docker container run -d -e externalEndpointUrl=https://profile.isystk.com -p 8080:80 ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/profile.isystk.com:v1
+$ docker container run -d -e DATABASE_URL=mysql://root:password@nextjs-nestjs-graphql-db.cluster-cqzuhfxnig0a.ap-northeast-1.rds.amazonaws.com:3306/sample -p 9000:9000 ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-nestjs-graphql-backend:v1
 $ docker container ls
 CONTAINER ID   IMAGE                                                                 COMMAND   CREATED          STATUS          PORTS                                   NAMES
-53f64e2b8d72   004796740041.dkr.ecr.ap-northeast-1.amazonaws.com/profile.isystk.com:v1   "/main"   16 seconds ago   Up 15 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   kind_bardeen
+53f64e2b8d72   004796740041.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-nestjs-graphql-backend:v1   "/main"   16 seconds ago   Up 15 seconds   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   kind_bardeen
 
 # 起動したAPIサーバーにリスクエストする
-$ date; curl http://localhost:8080
+$ date; curl http://localhost:9000/graphql
+
+# Prismaをマイグレーションしてテーブルを作成する
+$ cp .env.example .env
+# .env に記載の接続情報を編集してから以下を実行する
+$ npx prisma migrate dev --name post
 
 ```
