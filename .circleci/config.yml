@@ -39,7 +39,7 @@ jobs:
       - restore_npm
       - run:
           name: Lint
-          command: yarn lint
+          command: ls && yarn lint
       - save_npm
 
   build:
