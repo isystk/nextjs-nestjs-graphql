@@ -1,7 +1,7 @@
 version: 2.1
 executors:
   frontend:
-    working_directory: ~/nextjs-nestjs-graphql
+    working_directory: ~/nextjs-nestjs-graphql/frontend
     docker:
       - image: node:14
 
@@ -40,7 +40,7 @@ jobs:
       - run:
           working_directory: ~/nextjs-nestjs-graphql/frontend
           name: Lint
-          command: ls && yarn lint
+          command: yarn lint
       - save_npm
 
   build:
