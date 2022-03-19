@@ -10,13 +10,13 @@ commands:
     steps:
       - restore_cache:
           name: Restore npm dependencies
-          key: npm-{{ checksum "yarn.lock" }}
+          key: npm-{{ checksum "frontend/yarn.lock" }}
   
   save_npm:
     steps:
       - save_cache:
           name: Cache npm dependencies
-          key: npm-{{ checksum "yarn.lock" }}
+          key: npm-{{ checksum "frontend/yarn.lock" }}
           paths:
             - ~/nextjs-nestjs-graphql/frontend/node_modules
 
