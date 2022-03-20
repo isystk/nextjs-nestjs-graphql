@@ -1,14 +1,9 @@
-FROM node:16.13.1-alpine3.13
+FROM node:16
 
 WORKDIR /app
 
-RUN apk update && \
-    apk upgrade && \
-    apk add bash
-
 COPY . /app/
 
-RUN rm -rf dist node_modules
 RUN yarn install
 RUN yarn build
 
