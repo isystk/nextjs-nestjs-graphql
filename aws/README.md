@@ -135,7 +135,7 @@ AZ：「container」と名前のつくもの
 ```text
 種類：IP addresses
 名前：nextjs-nestjs-graphql-backend-tg-blue
-パス：/graghql
+パス：/
 ポート：http:9000
 上記以外はデフォルトのまま
 ```
@@ -144,7 +144,7 @@ AZ：「container」と名前のつくもの
 ```text
 種類：IP addresses
 名前：nextjs-nestjs-graphql-backend-tg-green
-パス：/graghql
+パス：/
 ポート：http:10080
 上記以外はデフォルトのまま
 ```
