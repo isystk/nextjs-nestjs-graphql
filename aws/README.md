@@ -119,16 +119,16 @@ AZ：「container」と名前のつくもの
 ターゲットグループ1
 ```text
 種類：IP addresses
-名前：nextjs-nestjs-graphql-backend-tg-sbcntrdemo-blue
+名前：nextjs-nestjs-graphql-backend-tg-blue
 パス：/graghql
-ポート：http:80
+ポート：http:9000
 上記以外はデフォルトのまま
 ```
 
 ターゲットグループ2
 ```text
 種類：IP addresses
-名前：nextjs-nestjs-graphql-backend-tg-sbcntrdemo-green
+名前：nextjs-nestjs-graphql-backend-tg-green
 パス：/graghql
 ポート：http:10080
 上記以外はデフォルトのまま
@@ -150,10 +150,11 @@ Fargate
 タスクメモリ：1GB
 タスクCPU：0.5vCPU
 コンテナ名：app
-イメージ：004796740041.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-nestjs-graphql-backend:v1
+イメージ：004796740041.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-nestjs-graphql-backend:latest
 メモリ：ソフト制限 512M
-ポートマッピング：80
+ポートマッピング：9000
 CPUユニット数：256
+環境変数：DATABASE_URL=mysql://root:password@nextjs-nestjs-graphql-db.cqzuhfxnig0a.ap-northeast-1.rds.amazonaws.com:3306/sample
 上記以外はデフォルトのまま
 ```
 
@@ -161,7 +162,7 @@ ECSクラスターの作成
 ```text
 テンプレート：ネットワーキングのみ
 名前：nextjs-nestjs-graphql-backend-cluster
-Container Insights を有効にする
+Container Insights を有効(有料)にする
 上記以外はデフォルトのまま
 ```
 
@@ -179,13 +180,13 @@ CodeDeploy のサービスロール：ecsCodeDeployRole
 パブリック IP の自動割り当て：Disabled
 ヘルスチェックの猶予期間：120
 Application Load Balancer
-ロードバランサー名：nextjs-nestjs-graphql-alb-internal
+ロードバランサー名：nextjs-nestjs-graphql-backend-alb-internal
 コンテナ名ポート：app:80:9000
 ロードバランサーに追加→
 ポロダクションリスナーポート：80
 テストリスナーポート：10080
-ターゲットグループ 1 の名前：sbcntr-tg-sbcntrdemo-blue
-ターゲットグループ 2 の名前：sbcntr-tg-sbcntrdemo-green
+ターゲットグループ 1 の名前：nextjs-nestjs-graphql-backend-tg-blue
+ターゲットグループ 2 の名前：nextjs-nestjs-graphql-backend-tg-green
 サービスの検出の統合の有効化
 サービスの検出名：nextjs-nestjs-graphql-backend-service
 DNS レコード型：A
