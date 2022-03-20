@@ -92,13 +92,17 @@ $ docker image ls
 $ docker image pull ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-nestjs-graphql-backend:v1
 
 # Dockerコンテナを起動する
-$ docker container run -d -e DATABASE_URL=mysql://root:password@nextjs-nestjs-graphql-db.cluster-cqzuhfxnig0a.ap-northeast-1.rds.amazonaws.com:3306/sample -p 9000:9000 ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-nestjs-graphql-backend:v1
+$ docker container run -d -e DATABASE_URL=mysql://root:password@nextjs-nestjs-graphql-db-cluster.cluster-cqzuhfxnig0a.ap-northeast-1.rds.amazonaws.com:3306/sample -p 9000:9000 ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-nestjs-graphql-backend:v1
 $ docker container ls
 CONTAINER ID   IMAGE                                                                 COMMAND   CREATED          STATUS          PORTS                                   NAMES
 53f64e2b8d72   004796740041.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-nestjs-graphql-backend:v1   "/main"   16 seconds ago   Up 15 seconds   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   kind_bardeen
 
 # 起動したAPIサーバーにリスクエストする
-$ date; curl http://localhost:9000/graphql
+$ date; curl http://localhost:9000
+Hello World!
+
+# RDS への接続を確認する
+$  mysql -u root -ppassword -h nextjs-nestjs-graphql-db-cluster.cluster-cqzuhfxnig0a.ap-northeast-1.rds.amazonaws.com sample
 
 # Prismaをマイグレーションしてテーブルを作成する
 $ cp .env.example .env

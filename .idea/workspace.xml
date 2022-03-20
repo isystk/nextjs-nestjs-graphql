@@ -4,6 +4,10 @@
     <list default="true" id="9bda4e0c-c9ce-412e-845d-e33252f7a4c0" name="変更" comment="AWS Cognito にてログインに成功">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aws/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/aws/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/cloud9/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/aws/cloud9/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/network.png" beforeDir="false" afterPath="$PROJECT_DIR$/aws/network.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/common/env/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/common/env/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +54,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.ScratchImplUtil$2/新規スクラッチファイル" value="JSON" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/frontend" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -113,7 +118,7 @@
       <workItem from="1640430347985" duration="1261000" />
       <workItem from="1642232120968" duration="133000" />
       <workItem from="1647656856073" duration="25803000" />
-      <workItem from="1647737380329" duration="4354000" />
+      <workItem from="1647737380329" duration="15696000" />
     </task>
     <task id="LOCAL-00001" summary="AWS Cognito にてログインに成功">
       <created>1637839052175</created>

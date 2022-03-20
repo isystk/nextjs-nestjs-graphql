@@ -8,6 +8,7 @@ RUN apk update && \
 
 COPY . /app/
 
+RUN rm -rf node_modules
 RUN yarn install
 RUN yarn build
 

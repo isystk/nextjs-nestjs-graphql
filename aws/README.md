@@ -1,5 +1,6 @@
 
 ## ネットワーク構成
+https://drive.google.com/file/d/1apdUexohgn13wSd_I7kaWmujCYJPpACz/view?usp=sharing
 ![ネットワーク構成](./network.png "ネットワーク構成")
 
 ## 見積もり
@@ -104,6 +105,20 @@ IAM → ロール → ロールを作成
 上記以外はデフォルトのまま
 ```
 
+#### CLIからFargateコンテナにシェルでアクセスするためのIAMロールを作成する
+IAM → ロール → ロールを作成
+```text
+ポリシーの名前：isystk-Fargateaccess
+ポリシーのJSON：fargate_access.json
+```
+IAM → ポリシー → ポリシーを作成
+```text
+ユースケース：Elastic Container Service Task
+ロールの名前：isystk-Fargateaccess
+ロールに適用するポリシー：isystk-Fargateaccess
+上記以外はデフォルトのまま
+```
+
 
 #### バックエンド用のECSを作成する
 
@@ -146,7 +161,7 @@ AZ：「container」と名前のつくもの
 ```text
 Fargate
 名前：nextjs-nestjs-graphql-backend-def
-タスクロール：なし
+タスクロール：isystk-Fargateaccess
 タスクメモリ：1GB
 タスクCPU：0.5vCPU
 コンテナ名：app
@@ -154,7 +169,7 @@ Fargate
 メモリ：ソフト制限 512M
 ポートマッピング：9000
 CPUユニット数：256
-環境変数：DATABASE_URL=mysql://root:password@nextjs-nestjs-graphql-db.cqzuhfxnig0a.ap-northeast-1.rds.amazonaws.com:3306/sample
+環境変数：DATABASE_URL=mysql://root:password@nextjs-nestjs-graphql-db-cluster.cluster-cqzuhfxnig0a.ap-northeast-1.rds.amazonaws.com:3306/sample
 上記以外はデフォルトのまま
 ```
 
