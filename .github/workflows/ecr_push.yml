@@ -6,6 +6,7 @@ on:
 #      - v*
     branches:
       - master
+
 jobs:
   ecr-backend:
     name: ECR Backend
