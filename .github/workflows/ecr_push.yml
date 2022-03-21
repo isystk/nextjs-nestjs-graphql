@@ -1,4 +1,4 @@
-name: Build and Push to ECR Public
+name: Build and Push to ECR
 
 on:
   push:
@@ -13,20 +13,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Login to Public ECR
-        uses: docker/login-action@v1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          registry: public.ecr.aws
-          username: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        env:
-          AWS_REGION: us-east-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "ap-northeast-1"
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build, tag, and push image to Amazon ECR Public
         id: build-and-push-tag
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: nextjs-nestjs-graphql-frontend
+          ECR_REPOSITORY: nextjs-nestjs-graphql-backend
         run: |
           cd backend
           IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
