@@ -32,8 +32,8 @@ jobs:
         run: |
           cd backend
           IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
-          docker build -t public.ecr.aws/$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push public.ecr.aws/$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo ::set-output name=version::$IMAGE_TAG
 
 #      - name: Slack Notification
