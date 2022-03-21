@@ -5,6 +5,8 @@
       <change beforePath="$PROJECT_DIR$/.github/workflows/ecr_push.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ecr_push.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +54,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.ScratchImplUtil$2/新規スクラッチファイル" value="JSON" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/frontend" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/backend" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
@@ -62,9 +64,9 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/backend" />
       <recent name="$PROJECT_DIR$/frontend" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/backend" />
       <recent name="$PROJECT_DIR$/docker/nestjs/app" />
       <recent name="$PROJECT_DIR$/server/src" />
     </key>
@@ -115,7 +117,7 @@
       <workItem from="1640430347985" duration="1261000" />
       <workItem from="1642232120968" duration="133000" />
       <workItem from="1647656856073" duration="25803000" />
-      <workItem from="1647737380329" duration="26185000" />
+      <workItem from="1647737380329" duration="27270000" />
     </task>
     <task id="LOCAL-00001" summary="AWS Cognito にてログインに成功">
       <created>1637839052175</created>
