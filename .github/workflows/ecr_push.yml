@@ -2,10 +2,10 @@ name: Build and Push to ECR
 
 on:
   push:
-#    tags:
-#      - v*
     branches:
       - master
+#    tags:
+#      - v*
 
 jobs:
   ecr-backend:
@@ -33,8 +33,8 @@ jobs:
           ECR_REPOSITORY: nextjs-nestjs-graphql-backend
         run: |
           cd backend
-#          IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
           IMAGE_TAG=latest
+          # IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo ::set-output name=version::$IMAGE_TAG
@@ -64,8 +64,8 @@ jobs:
           ECR_REPOSITORY: nextjs-nestjs-graphql-frontend
         run: |
           cd frontend
-#          IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
           IMAGE_TAG=latest
+          # IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo ::set-output name=version::$IMAGE_TAG
