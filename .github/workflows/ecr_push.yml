@@ -1,63 +1,53 @@
-name: ECR Push
+name: Build and Push to ECR Public
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - v*
 
 jobs:
-  ecr-frontend:
+  ecr-backend:
+    name: ECR Backend
     runs-on: ubuntu-latest
-    name: ECR Frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Login to Public ECR
+        uses: docker/login-action@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: "ap-northeast-1"
+          registry: public.ecr.aws
+          username: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        env:
+          AWS_REGION: us-east-1
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Build, tag, and push image to Amazon ECR Public
+        id: build-and-push-tag
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: nextjs-nestjs-graphql-frontend
-          IMAGE_TAG: latest
         run: |
-          cd frontend
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          cd backend
+          IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
+          docker build -t public.ecr.aws/$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push public.ecr.aws/$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo ::set-output name=version::$IMAGE_TAG
 
-  ecr-backend:
-    runs-on: ubuntu-latest
-    name: ECR Backend
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: "ap-northeast-1"
-
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Build, tag, and push image to Amazon ECR
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: nextjs-nestjs-graphql-backend
-        IMAGE_TAG: latest
-      run: |
-        cd backend
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+#      - name: Slack Notification
+#        if: success()
+#        run: |
+#          jq -n --arg titleLink '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}' '{
+#            attachments: [{
+#              pretext: ":white_check_mark: ECR publicに最新imageのpushが完了しました",
+#              color: "good",
+#              title: $titleLink,
+#              title_link: $titleLink,
+#              fields: [
+#                {
+#                  "title": "Tag",
+#                  "value": "${{ steps.build-and-push-tag.outputs.version }}",
+#                }
+#              ]
+#            }]
+#          }' | curl ${{ secrets.SLACK_WEBHOOK_URL }} -X POST -H 'Content-Type: application/json' -d @-
